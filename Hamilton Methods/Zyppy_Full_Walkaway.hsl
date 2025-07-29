@@ -1,0 +1,1696 @@
+ namespace _Method { #include "HslHamHeaterShakerLib.hsl" } 
+ namespace _Method { #include "ASWStandard\\ASWGlobal\\ASWGlobal.hsl" } 
+#include "Zyppy_Modified_Layout_v2.0.res"
+/* {{ 2 "LibraryInsertLine" "" */ // }} ""
+variable Zyppy_varHHS1;
+variable Zyppy_varHHS2;
+dialog customDialog6F32CA77F9164b2fA2F285A09678A6B5;
+dialog customDialog4A5C34EABA344eca81B0688676C0925A;
+variable Zyppy_var_Sample_Number;
+variable Zyppy_bol_Deep_Blue_Lysis_Step;
+dialog customDialog0EBDC64D5402453189D0630BC191FD06;
+dialog customDialog3437098425454418BADF623D78CC137C;
+variable Zyppy_MagClearing_Beads_Vortex_Duration;
+variable Zyppy_MagClearing_Beads_Volume;
+variable Zyppy_Neutralization_Buffer_Volume;
+variable Zyppy_MagClearing_Beads_Magnet_Supernatant_Transfer_Volume;
+variable Zyppy_Deep_Blue_Lysis_Buffer_Incubation_Duration;
+variable Zyppy_Deep_Blue_Lysis_Buffer_Volume;
+variable Zyppy_Neutralization_Buffer_Vortex_Duration;
+variable Zyppy_Deep_Blue_Lysis_Buffer_Vortex_Duration;
+variable Zyppy_MagClearing_Beads_Magnet_Incubation_Duration;
+variable loopCounter4;
+variable Zyppy_MagClearing_Beads_Magnet_Supernatant_Transfer_Height;
+timer timer1;
+variable loopCounter5;
+variable loopCounter7;
+variable loopCounter6;
+timer timer2;
+variable loopCounter8;
+variable Zyppy_MagBinding_Beads_Supernatant_Removal_Volume;
+variable Zyppy_MagBinding_Beads_Volume;
+variable Zyppy_MagBinding_Beads_Vortex_Duration;
+variable Zyppy_MagBinding_Beads_Magnet_Incubation_Duration;
+variable Zyppy_MagBinding_Beads_Vortex_Total_Duration;
+variable Zyppy_MagBinding_Beads_Vortex_Incubation_Duration;
+timer timer3;
+variable Zyppy_Endo_Wash_Buffer_Magnet_Incubation_Duration;
+variable Zyppy_Endo_Wash_Buffer_Volume;
+variable Zyppy_Endo_Wash_Buffer_Vortex_Duration;
+variable Zyppy_Endo_Wash_Buffer_Supernatant_Removal_Volume;
+timer timer4;
+variable Zyppy_Zyppy_Wash_Buffer_Volume;
+variable Zyppy_Zyppy_Wash_Buffer_Supernatant_Removal_Volume;
+variable Zyppy_Zyppy_Wash_Buffer_Magnet_Incubation_Duration;
+variable Zyppy_Zyppy_Wash_Buffer_Vortex_Duration;
+variable loopCounter9;
+variable Zyppy_Elution_Buffer_Magnet_Incubation_Duration;
+variable Zyppy_Elution_Buffer_Vortex_Loop_Recursion_Amount;
+variable Zyppy_Drying_Time_Duration;
+variable Zyppy_Elution_Buffer_Volume;
+variable Zyppy_Elution_Buffer_Elution_Plate_Transfer_Volume;
+variable Zyppy_Elution_Buffer_Incubation_Temperature;
+variable Zyppy_Elution_Buffer_Vortex_Intermittent_Vortex_Duration;
+variable Zyppy_Elution_Buffer_Vortex_Intermittent_Incubation_Duration;
+variable Zyppy_Elution_Buffer_Vortex_Duration;
+timer timer5;
+timer timer6;
+timer timer7;
+timer timer8;
+dialog customDialog0C588B244805453d93C7E68EA6146F1F;
+dialog customDialog905BA7FAC3BF4d3398089FD4931FCDC9;
+dialog customDialog0163390B43674f319D6451B3F23C8557;
+global device ML_STAR ("Zyppy_Modified_Layout_v2.0.lay", "ML_STAR", hslTrue);
+variable t_fltMagClearingTotalVolume;
+variable t_fltMagBindingTotalVolume;
+variable t_fltEBTotalVolume;
+variable t_intRemainingPositions;
+dialog customDialogB45D19C955374873B73A58238695C4DE;
+dialog customDialog041DE0AB7AD74199AD5937F2183E5CF6;
+dialog customDialogDC842CFB9C2B4f81A7D3B88CE8E24628;
+variable t_intNeutralizationBufferVolume;
+variable t_intZyppyWashBufferVolume;
+variable t_intDeepBlueLysisBufferVolume;
+variable t_intEndoWashBufferVolume;
+dialog customDialog432AB51114A7491e9E18F2019433FEFD;
+/* {{ 2 "VariableInsertLine" "" */ // }} ""
+// {{ 2 "TemplateIncludeBlock" ""
+ namespace _Method { #include "HSLMETEDLib.hs_" } 
+ namespace _Method { #include "HSLMECCLib.hs_" } 
+ namespace _Method { #include "HSLPTLLib.hsl" } 
+ namespace _Method { #include "templates\\HSLPipetteWizard.hsl" } 
+ namespace _Method { #include "HSLSchedCCLib.hs_" } 
+// }} ""
+// {{{ 2 "LocalSubmethodInclude" ""
+ namespace _Method {  #include __filename__ ".sub"  } 
+// }} ""
+/* {{ 2 "ProcessInsertLine" "" */ // }} ""
+// {{{ 5 "main" "Begin"
+namespace _Method { method main(  ) void {
+// }} ""
+// {{ 5 "main" "InitLocals"
+// }} ""
+// {{ 2 "AutoInitBlock" ""
+PTL::SetWashingStateDefault("RinseTime1", 5);
+PTL::SetWashingStateDefault("SoakTime1", 5);
+PTL::SetWashingStateDefault("FlowRate1", 11);
+PTL::SetWashingStateDefault("RinseTime2", 0);
+PTL::SetWashingStateDefault("SoakTime2", 0);
+PTL::SetWashingStateDefault("FlowRate2", 11);
+PTL::SetWashingStateDefault("DrainingTime", 10);
+PTL::SetWashingStateDefault("StartWashLiquid", 0);
+PTL::SetLoadingStateDefault("RecoveryOptionContinue", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionExclude", hslTrue);
+PTL::SetLoadingStateDefault("RecoveryOptionDefault", 0);
+PTL::SetLoadingStateDefault("KitLotCheckEnabled", hslFalse);
+::RegisterAbortHandler( "OnAbort");
+// }} ""
+// {{ 1 1 0 "98e5d557_eee7_460a_b6752af53f91aafc" "{F07B0071-8EFC-11d4-A3BA-002035848439}"
+
+// }} ""
+// {{ 2 1 0 "6be8ef64_4b82_48be_b886aff7d1260fd6" "ML_STAR:{1C0C0CB0-7C87-11D3-AD83-0004ACB1DCB2}"
+{
+	variable arrRetValues[];
+	arrRetValues = ML_STAR._1C0C0CB0_7C87_11D3_AD83_0004ACB1DCB2("6be8ef64_4b82_48be_b886aff7d1260fd6"); // Initialize
+}
+// }} ""
+// {{ 3 1 0 "b72e983f_f502_43eb_a45a45b112ea51f8" "ML_STAR:{EA251BFB-66DE-48D1-83E5-6884B4DD8D11}"
+{
+	variable arrRetValues[];
+	arrRetValues = ML_STAR._EA251BFB_66DE_48D1_83E5_6884B4DD8D11("b72e983f_f502_43eb_a45a45b112ea51f8"); // MoveAutoLoad
+}
+// }} ""
+// {{ 4 1 0 "b36a9537_f3cd_48e5_8f224250e46cd66e" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 5 1 0 "ed6ad029_5c65_440b_9ab116b0228a9115" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 6 1 0 "edbda8b4_3e6c_4624_90c40aec03df98ec" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_varHHS1 = Translate("HHS1");
+// }} ""
+// {{ 7 1 0 "49f6b52f_aef9_46cc_9ebf2ddcd0e08543" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_varHHS2 = Translate("HHS2");
+// }} ""
+// {{{ 8 1 0 "8ff57486_9f99_4490_b6347b054ee44645" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::CreateUsbDevice(3, Zyppy_varHHS1);
+// }} ""
+// {{{ 9 1 0 "01fe7b3f_a2a8_4508_9da443be64700bf4" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::CreateUsbDevice(5, Zyppy_varHHS2);
+// }} ""
+// {{{ 10 1 0 "299c5e9a_8837_4097_8de4b6ab5bb413f9" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StartTempCtrl(Zyppy_varHHS1, 22, 0);
+// }} ""
+// {{{ 11 1 0 "962ccbfe_21f9_44ce_9a3769403c210037" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StartTempCtrl(Zyppy_varHHS2, 22, 0);
+// }} ""
+// {{ 12 1 0 "ed6ad029_5c65_440b_9ab116b0228a9115" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 13 1 0 "b36a9537_f3cd_48e5_8f224250e46cd66e" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 14 1 0 "e77b0b0d_2d8f_486e_bd351831348a0f20" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - (1) PROTOCOL PREPARATION\nReagent and Consumable Preparation\nSample Number Selection\n");
+// }} ""
+// {{ 15 1 0 "b679e6dc_34a0_4450_b4d8bf3a26066440" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialogB45D19C955374873B73A58238695C4DE.InitCustomDialog( "b679e6dc_34a0_4450_b4d8bf3a26066440" );
+customDialogB45D19C955374873B73A58238695C4DE.ShowCustomDialog();
+Zyppy_var_Sample_Number = customDialogB45D19C955374873B73A58238695C4DE.GetCustomDialogProperty( "numeric1.Value" );
+Zyppy_bol_Deep_Blue_Lysis_Step = customDialogB45D19C955374873B73A58238695C4DE.GetCustomDialogProperty( "checkBox1.IsChecked" );
+// }} ""
+// {{ 16 1 0 "af29a791_da4f_41c8_9ede312a194d9c8d" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialog4A5C34EABA344eca81B0688676C0925A.InitCustomDialog( "af29a791_da4f_41c8_9ede312a194d9c8d" );
+customDialog4A5C34EABA344eca81B0688676C0925A.ShowCustomDialog();
+// }} ""
+// {{ 17 1 0 "31930d86_5102_4298_9dfee56e65221b83" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialog6F32CA77F9164b2fA2F285A09678A6B5.InitCustomDialog( "31930d86_5102_4298_9dfee56e65221b83" );
+customDialog6F32CA77F9164b2fA2F285A09678A6B5.ShowCustomDialog();
+// }} ""
+// {{ 18 1 0 "dad33afb_3b14_494d_94f8729da6912c0f" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialog3437098425454418BADF623D78CC137C.InitCustomDialog( "dad33afb_3b14_494d_94f8729da6912c0f" );
+customDialog3437098425454418BADF623D78CC137C.ShowCustomDialog();
+// }} ""
+// {{ 19 1 0 "e213b7c6_308a_483e_920d28b20a294761" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 20 1 0 "31279cb5_0d5b_4890_97e15266bda64257" "{B31F353C-5D80-11d4-A5EB-0050DA737D89}"
+ML_STAR.Zyppy_Magnet_Deep_Well_Plate.SetCount(Zyppy_var_Sample_Number);
+// }} ""
+// {{ 21 1 0 "92396922_f85a_4c3a_ab1baf388fa99ae3" "{B31F353C-5D80-11d4-A5EB-0050DA737D89}"
+ML_STAR.Zyppy_Collection_Plate.SetCount(Zyppy_var_Sample_Number);
+// }} ""
+// {{ 22 1 0 "f75483aa_8d47_48bc_830e624310c0b67e" "{B31F353C-5D80-11d4-A5EB-0050DA737D89}"
+ML_STAR.Zyppy_Elution_Plate.SetCount(Zyppy_var_Sample_Number);
+// }} ""
+// {{ 23 1 0 "b78363e9_c65e_4230_ae6f14a31debd24b" "{B31F353C-5D80-11d4-A5EB-0050DA737D89}"
+ML_STAR.Zyppy_Magnet_MIDI_Plate.SetCount(Zyppy_var_Sample_Number);
+// }} ""
+// {{ 24 1 0 "e213b7c6_308a_483e_920d28b20a294761" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 25 1 0 "c195d079_a71d_4f66_8fb7b2c75c5bb7a8" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 26 1 0 "a422924e_7263_4f68_a0fda2e31e51b3cf" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+t_fltMagClearingTotalVolume = Zyppy_var_Sample_Number * 50 / (4 * 1.0) + 100;
+// }} ""
+// {{ 27 1 0 "569f72f3_519f_4beb_be4f8cfcfbdf0058" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+t_fltMagBindingTotalVolume = Zyppy_var_Sample_Number * 30 / (4 * 1.0) + 100;
+// }} ""
+// {{ 28 1 0 "46336b5c_5ee6_41b4_92cc86b5c037ea22" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+t_fltEBTotalVolume = Zyppy_var_Sample_Number * 40 / (4 * 1.0) + 100;
+// }} ""
+// {{ 29 1 0 "6923e8fd_48fe_427d_b92fc3b9fc342f04" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+t_intDeepBlueLysisBufferVolume = Zyppy_var_Sample_Number * 100 + 3000;
+// }} ""
+// {{ 30 1 0 "34bbd19a_ef8c_43fc_97e62c7337770867" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+t_intDeepBlueLysisBufferVolume = t_intDeepBlueLysisBufferVolume / (1000 * 1.0);
+// }} ""
+// {{ 31 1 0 "2e2aeb06_f82b_4963_ae93b4613bd715ef" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+t_intNeutralizationBufferVolume = Zyppy_var_Sample_Number * 450 + 3000;
+// }} ""
+// {{ 32 1 0 "a2521da1_ce6a_4287_9fecc7e283255f97" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+t_intNeutralizationBufferVolume = t_intNeutralizationBufferVolume / (1000 * 1.0);
+// }} ""
+// {{ 33 1 0 "592c2532_5ae1_4f1d_a70f987d9059b42e" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+t_intEndoWashBufferVolume = Zyppy_var_Sample_Number * 200 + 3000;
+// }} ""
+// {{ 34 1 0 "b8391538_0415_4b06_b29e9164716c18f1" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+t_intEndoWashBufferVolume = t_intEndoWashBufferVolume / (1000 * 1.0);
+// }} ""
+// {{ 35 1 0 "ad727c38_2fbc_40f0_a14258cadb700d48" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+t_intZyppyWashBufferVolume = Zyppy_var_Sample_Number * 400 + 3000;
+// }} ""
+// {{ 36 1 0 "c768b916_b255_4f85_8c1c6c587fbaa82c" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+t_intZyppyWashBufferVolume = t_intZyppyWashBufferVolume / (1000 * 1.0);
+// }} ""
+// {{ 37 1 0 "c195d079_a71d_4f66_8fb7b2c75c5bb7a8" "{586C3429-F931-405f-9938-928E22C90BFA}"
+
+// }} ""
+// {{ 38 1 0 "e77b0b0d_2d8f_486e_bd351831348a0f20" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - (1) PROTOCOL PREPARATION\nReagent and Consumable Preparation\nSample Number Selection\n");
+// }} ""
+// {{ 39 1 0 "2461ac66_a7ee_49ee_9f9dbf0c60e9aa1a" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - (2) PROTOCOL (Deep Blue Lysis Buffer)\nOptional: Automated Deep Blue Lysis Buffer\n1. Remove Air-Permeable Seal\n2. Dispense 100 킠 of Deep Blue Lysis Buffer to each well containing culture and vortex for 10 seconds. Let it sit for 5 minutes\n3. Add 450 킠 of Neutralization Buffer and vortex for 45 seconds.\n4. Dispense 50 킠 of MagClearing Beads and vortex for 10 seconds.\n5. Transfer 96-Well Block to a magnetic stand and allow to sit for 6 minutes. Transfer 750 킠 of cleared lysate to a Collection Plate. ");
+// }} ""
+// {{ 40 1 0 "f9633ead_d583_416a_8a82b65258523984" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Zyppy_bol_Deep_Blue_Lysis_Step == ASWGLOBAL::BOOL::TRUE)
+{
+// }} ""
+// {{ 41 1 0 "0d2803c2_f8bb_4c25_90310125897759ac" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - Deep Blue Lysis Step Variable and Sequence Assignment");
+// }} ""
+// {{ 42 1 0 "928d0c86_adf5_4244_85f243423f9fb014" "{B31F353C-5D80-11d4-A5EB-0050DA737D89}"
+ML_STAR.Zyppy_Lysis_Plate.SetCount(Zyppy_var_Sample_Number);
+// }} ""
+// {{ 43 1 0 "d3143a41_7dfa_43d0_83e5e99dea879768" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Deep_Blue_Lysis_Buffer_Volume = 100;
+// }} ""
+// {{ 44 1 0 "0da3e213_787a_4f79_87d99ee745bfdc67" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Deep_Blue_Lysis_Buffer_Vortex_Duration = 300;
+// }} ""
+// {{ 45 1 0 "60d4fe7a_8211_46f1_97721e9747a83e6e" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Deep_Blue_Lysis_Buffer_Incubation_Duration = 300;
+// }} ""
+// {{ 46 1 0 "baa18449_75e2_40d4_8bbc8f45d219534d" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Neutralization_Buffer_Volume = 450;
+// }} ""
+// {{ 47 1 0 "e4b31914_369c_4520_aae78f32af89b1b4" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Neutralization_Buffer_Vortex_Duration = 45;
+// }} ""
+// {{ 48 1 0 "3ee83fb0_204f_4687_945f28809f2887ac" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_MagClearing_Beads_Volume = 50;
+// }} ""
+// {{ 49 1 0 "24dbdec8_71e7_4c4d_adf9da71c51f3b0e" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_MagClearing_Beads_Vortex_Duration = 10;
+// }} ""
+// {{ 50 1 0 "8570c7c9_5fe2_4b72_b443f808aecba481" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_MagClearing_Beads_Magnet_Incubation_Duration = 360;
+// }} ""
+// {{ 51 1 0 "efb0db13_d7eb_41ff_b1c705385f1de988" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_MagClearing_Beads_Magnet_Supernatant_Transfer_Volume = 700;
+// }} ""
+// {{ 52 1 0 "401f420a_a44a_4c85_a93469c56422496a" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_MagClearing_Beads_Magnet_Supernatant_Transfer_Height = 10;
+// }} ""
+// {{ 53 1 0 "0d2803c2_f8bb_4c25_90310125897759ac" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - Deep Blue Lysis Step Variable and Sequence Assignment");
+// }} ""
+// {{ 54 1 0 "910f4159_fdd3_460e_bff8eb97ce68a94b" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - Hamilton Deck Set-Up\n1. Remove the 96-Well Block from the incubator and discard the Air-Permeable Sealing Cover.");
+// }} ""
+// {{ 55 1 0 "9b566cca_b9b8_4d9d_8da4caa028595575" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialog905BA7FAC3BF4d3398089FD4931FCDC9.InitCustomDialog( "9b566cca_b9b8_4d9d_8da4caa028595575" );
+customDialog905BA7FAC3BF4d3398089FD4931FCDC9.ShowCustomDialog();
+// }} ""
+// {{ 56 1 0 "a21203e2_bd42_4fc8_b002b81b06f8bfff" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialog0163390B43674f319D6451B3F23C8557.InitCustomDialog( "a21203e2_bd42_4fc8_b002b81b06f8bfff" );
+customDialog0163390B43674f319D6451B3F23C8557.SetCustomDialogProperty( "textBlock3.Text", t_fltMagClearingTotalVolume );
+customDialog0163390B43674f319D6451B3F23C8557.SetCustomDialogProperty( "textBlock4.Text", t_fltMagBindingTotalVolume );
+customDialog0163390B43674f319D6451B3F23C8557.SetCustomDialogProperty( "textBlock5.Text", t_fltEBTotalVolume );
+customDialog0163390B43674f319D6451B3F23C8557.ShowCustomDialog();
+// }} ""
+// {{ 57 1 0 "4a1c376f_17f5_4543_aa29d13b13ddba44" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialog0EBDC64D5402453189D0630BC191FD06.InitCustomDialog( "4a1c376f_17f5_4543_aa29d13b13ddba44" );
+customDialog0EBDC64D5402453189D0630BC191FD06.SetCustomDialogProperty( "textBlock8.Text", t_intDeepBlueLysisBufferVolume );
+customDialog0EBDC64D5402453189D0630BC191FD06.SetCustomDialogProperty( "textBlock9.Text", t_intNeutralizationBufferVolume );
+customDialog0EBDC64D5402453189D0630BC191FD06.SetCustomDialogProperty( "textBlock10.Text", t_intEndoWashBufferVolume );
+customDialog0EBDC64D5402453189D0630BC191FD06.SetCustomDialogProperty( "textBlock11.Text", t_intZyppyWashBufferVolume );
+customDialog0EBDC64D5402453189D0630BC191FD06.SetCustomDialogProperty( "textBlock12.Text", t_intZyppyWashBufferVolume );
+customDialog0EBDC64D5402453189D0630BC191FD06.ShowCustomDialog();
+// }} ""
+// {{ 58 1 0 "910f4159_fdd3_460e_bff8eb97ce68a94b" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - Hamilton Deck Set-Up\n1. Remove the 96-Well Block from the incubator and discard the Air-Permeable Sealing Cover.");
+// }} ""
+// {{ 59 1 0 "9306f278_7867_4522_9302bd7400126941" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 2. Dispense 100 킠 of Deep Blue Lysis Buffer to each well containing culture and vortex for 10 seconds. Let it sit for 5 minutes.");
+// }} ""
+// {{ 60 1 0 "a8edea84_b127_4504_89f5d08c35861155" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+loopCounter4 = 0;
+while (
+   (ML_STAR.Zyppy_Lysis_Plate.GetCurrentPosition() > 0)
+)
+{
+AlignSequences(hslTrue, ML_STAR.Zyppy_Deep_Blue_Lysis_Buffer, 1, ML_STAR.Zyppy_Deep_Blue_Lysis_Buffer_300F_Tips, 1, ML_STAR.Zyppy_Lysis_Plate, 1);
+loopCounter4 = loopCounter4 + 1;
+// }} ""
+// {{ 61 1 0 "cc14c08f_5eff_49c5_b7aeee327ba0ecba" "ML_STAR:{E91EFCB6-A447-4dfc-828E-7EBF29139CD2}"
+{
+	ML_STAR._E91EFCB6_A447_4dfc_828E_7EBF29139CD2("cc14c08f_5eff_49c5_b7aeee327ba0ecba"); // EasyAspirate
+}
+// }} ""
+// {{ 62 1 0 "d985227d_e454_4ce5_854cfe479cdff4d5" "{EBC6FD39-B416-4461-BD0E-312FBC5AEF1F}"
+if ( ML_STAR.Zyppy_Lysis_Plate.GetCurrentPosition() == 0 ) t_intRemainingPositions = 0;
+else t_intRemainingPositions = ML_STAR.Zyppy_Lysis_Plate.GetCount() - ML_STAR.Zyppy_Lysis_Plate.GetCurrentPosition() + 1;
+// }} ""
+// {{ 63 1 0 "60238558_3b93_47eb_8400f5c6db9a3043" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (t_intRemainingPositions <= 8)
+{
+// }} ""
+// {{ 64 1 0 "20c93978_0bee_4dfa_ad26c8f6a457f055" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("20c93978_0bee_4dfa_ad26c8f6a457f055"); // EasyDispense
+}
+// }} ""
+// {{ 65 1 0 "60238558_3b93_47eb_8400f5c6db9a3043" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 66 1 0 "9b2693e0_b89c_4a29_bd1dd126bb2ab039" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("9b2693e0_b89c_4a29_bd1dd126bb2ab039"); // EasyDispense
+}
+// }} ""
+// {{ 67 1 0 "60238558_3b93_47eb_8400f5c6db9a3043" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 68 1 0 "a8edea84_b127_4504_89f5d08c35861155" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+if (
+   (ML_STAR.Zyppy_Lysis_Plate.GetCurrentPosition() > 0 && ML_STAR.Zyppy_Lysis_Plate.GetMax() == 0 )
+)
+{ MECC::EndlessSequenceLoopWarning(GetFileName()); }
+
+}
+ML_STAR.Zyppy_Deep_Blue_Lysis_Buffer.SetMax(ML_STAR.Zyppy_Deep_Blue_Lysis_Buffer.GetTotal());
+ML_STAR.Zyppy_Deep_Blue_Lysis_Buffer_300F_Tips.SetMax(ML_STAR.Zyppy_Deep_Blue_Lysis_Buffer_300F_Tips.GetTotal());
+ML_STAR.Zyppy_Lysis_Plate.SetMax(ML_STAR.Zyppy_Lysis_Plate.GetTotal());
+ML_STAR.Zyppy_Deep_Blue_Lysis_Buffer.SetCurrentPosition(1);
+ML_STAR.Zyppy_Deep_Blue_Lysis_Buffer_300F_Tips.SetCurrentPosition(1);
+ML_STAR.Zyppy_Lysis_Plate.SetCurrentPosition(1);
+}
+// }} ""
+// {{ 69 1 0 "c2f95ab8_3391_4b44_ad9b29f07107c7fa" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("c2f95ab8_3391_4b44_ad9b29f07107c7fa"); // EasyCOREGripTransport
+}
+// }} ""
+// {{{ 70 1 0 "974ecec2_28b0_4630_9b83a4ab1cc86823" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HSS_Shaking(Zyppy_varHHS2, 1600, Zyppy_Deep_Blue_Lysis_Buffer_Vortex_Duration);
+// }} ""
+// {{ 71 1 0 "3f59ebf4_f64a_4b23_b13368e445ca4510" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("3f59ebf4_f64a_4b23_b13368e445ca4510"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 72 1 0 "c4d788ed_4052_4f5c_95b4206c60aea774" "{B31F353E-5D80-11d4-A5EB-0050DA737D89}"
+timer1.SetTimerViewName("");
+if( 0 == timer1.SetTimer(Zyppy_Deep_Blue_Lysis_Buffer_Incubation_Duration) )
+{
+    MECC::RaiseRuntimeErrorEx(-1355939584, MECC::IDS::stepNameTimerStart, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 73 1 0 "385741b5_6526_463e_86b00947b4fb2150" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer1.WaitTimer(hslTrue, hslTrue) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 74 1 0 "9306f278_7867_4522_9302bd7400126941" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 2. Dispense 100 킠 of Deep Blue Lysis Buffer to each well containing culture and vortex for 10 seconds. Let it sit for 5 minutes.");
+// }} ""
+// {{ 75 1 0 "da0c0083_ad61_4b6a_830d2858063868c3" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 3. Dispense 450 킠 of Neutralization Buffer and vorte for 45 seconds.");
+// }} ""
+// {{ 76 1 0 "198d34b6_03a9_4cf0_acaf1f66b71c72f6" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+loopCounter5 = 0;
+while (
+   (ML_STAR.Zyppy_Lysis_Plate.GetCurrentPosition() > 0)
+)
+{
+AlignSequences(hslTrue, ML_STAR.Zyppy_Lysis_Plate, 1, ML_STAR.Zyppy_Neutralization_Buffer, 1, ML_STAR.Zyppy_Neutralization_Buffer_1000F_Tips, 1);
+loopCounter5 = loopCounter5 + 1;
+// }} ""
+// {{ 77 1 0 "0a96b81e_b550_469f_abb519b840b80f1f" "ML_STAR:{E91EFCB6-A447-4dfc-828E-7EBF29139CD2}"
+{
+	ML_STAR._E91EFCB6_A447_4dfc_828E_7EBF29139CD2("0a96b81e_b550_469f_abb519b840b80f1f"); // EasyAspirate
+}
+// }} ""
+// {{ 78 1 0 "20c351c5_d63e_4783_9f87f92698b83e70" "{EBC6FD39-B416-4461-BD0E-312FBC5AEF1F}"
+if ( ML_STAR.Zyppy_Lysis_Plate.GetCurrentPosition() == 0 ) t_intRemainingPositions = 0;
+else t_intRemainingPositions = ML_STAR.Zyppy_Lysis_Plate.GetCount() - ML_STAR.Zyppy_Lysis_Plate.GetCurrentPosition() + 1;
+// }} ""
+// {{ 79 1 0 "d13798a1_3245_4676_a19cdad0c02ca9a0" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (t_intRemainingPositions <= 8)
+{
+// }} ""
+// {{ 80 1 0 "a0dfd59d_8df3_4249_bef6b6084c9240c8" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("a0dfd59d_8df3_4249_bef6b6084c9240c8"); // EasyDispense
+}
+// }} ""
+// {{ 81 1 0 "d13798a1_3245_4676_a19cdad0c02ca9a0" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 82 1 0 "21ceb4d1_2c5a_4d24_9130b4ad63428a92" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("21ceb4d1_2c5a_4d24_9130b4ad63428a92"); // EasyDispense
+}
+// }} ""
+// {{ 83 1 0 "d13798a1_3245_4676_a19cdad0c02ca9a0" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 84 1 0 "198d34b6_03a9_4cf0_acaf1f66b71c72f6" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+if (
+   (ML_STAR.Zyppy_Lysis_Plate.GetCurrentPosition() > 0 && ML_STAR.Zyppy_Lysis_Plate.GetMax() == 0 )
+)
+{ MECC::EndlessSequenceLoopWarning(GetFileName()); }
+
+}
+ML_STAR.Zyppy_Lysis_Plate.SetMax(ML_STAR.Zyppy_Lysis_Plate.GetTotal());
+ML_STAR.Zyppy_Neutralization_Buffer.SetMax(ML_STAR.Zyppy_Neutralization_Buffer.GetTotal());
+ML_STAR.Zyppy_Neutralization_Buffer_1000F_Tips.SetMax(ML_STAR.Zyppy_Neutralization_Buffer_1000F_Tips.GetTotal());
+ML_STAR.Zyppy_Lysis_Plate.SetCurrentPosition(1);
+ML_STAR.Zyppy_Neutralization_Buffer.SetCurrentPosition(1);
+ML_STAR.Zyppy_Neutralization_Buffer_1000F_Tips.SetCurrentPosition(1);
+}
+// }} ""
+// {{ 85 1 0 "884cb67e_d0b2_45ee_a1d1c743be877ccd" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("884cb67e_d0b2_45ee_a1d1c743be877ccd"); // EasyCOREGripTransport
+}
+// }} ""
+// {{{ 86 1 0 "6a6670d7_5eca_43a8_ae03bef1135c59ad" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HSS_Shaking(Zyppy_varHHS2, 1100, Zyppy_Neutralization_Buffer_Vortex_Duration);
+// }} ""
+// {{ 87 1 0 "149d3d1a_6b74_4ccf_940611f6c6f14751" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("149d3d1a_6b74_4ccf_940611f6c6f14751"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 88 1 0 "da0c0083_ad61_4b6a_830d2858063868c3" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 3. Dispense 450 킠 of Neutralization Buffer and vorte for 45 seconds.");
+// }} ""
+// {{ 89 1 0 "b29e294b_cf0c_41d5_b013353e7c752b95" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 4. Dispense 50 킠 of MagClearing Beads and vortex for 10 seconds.");
+// }} ""
+// {{ 90 1 0 "f1112235_8a88_4e29_aa1b188d7cf8a07e" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+loopCounter6 = 0;
+while (
+   (ML_STAR.Zyppy_Lysis_Plate.GetCurrentPosition() > 0)
+)
+{
+AlignSequences(hslTrue, ML_STAR.Zyppy_Lysis_Plate, 1, ML_STAR.Zyppy_MagClearing_Beads, 1, ML_STAR.Zyppy_MagClearing_Beads_300F_Tips, 1);
+loopCounter6 = loopCounter6 + 1;
+// }} ""
+// {{ 91 1 0 "26be1166_d507_4f97_95145b64dda2d6e9" "ML_STAR:{E91EFCB6-A447-4dfc-828E-7EBF29139CD2}"
+{
+	ML_STAR._E91EFCB6_A447_4dfc_828E_7EBF29139CD2("26be1166_d507_4f97_95145b64dda2d6e9"); // EasyAspirate
+}
+// }} ""
+// {{ 92 1 0 "3b331599_1dd6_44fc_9880b617f78228d2" "{EBC6FD39-B416-4461-BD0E-312FBC5AEF1F}"
+if ( ML_STAR.Zyppy_Lysis_Plate.GetCurrentPosition() == 0 ) t_intRemainingPositions = 0;
+else t_intRemainingPositions = ML_STAR.Zyppy_Lysis_Plate.GetCount() - ML_STAR.Zyppy_Lysis_Plate.GetCurrentPosition() + 1;
+// }} ""
+// {{ 93 1 0 "453f7b1a_0329_46c0_a0a67f821365667d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (t_intRemainingPositions <= 8)
+{
+// }} ""
+// {{ 94 1 0 "0f351a43_bfe6_4d23_89282268ccee75ad" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("0f351a43_bfe6_4d23_89282268ccee75ad"); // EasyDispense
+}
+// }} ""
+// {{ 95 1 0 "453f7b1a_0329_46c0_a0a67f821365667d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 96 1 0 "8f48565c_9d03_41e0_b6796ae44f2aa2d6" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("8f48565c_9d03_41e0_b6796ae44f2aa2d6"); // EasyDispense
+}
+// }} ""
+// {{ 97 1 0 "453f7b1a_0329_46c0_a0a67f821365667d" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 98 1 0 "f1112235_8a88_4e29_aa1b188d7cf8a07e" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+if (
+   (ML_STAR.Zyppy_Lysis_Plate.GetCurrentPosition() > 0 && ML_STAR.Zyppy_Lysis_Plate.GetMax() == 0 )
+)
+{ MECC::EndlessSequenceLoopWarning(GetFileName()); }
+
+}
+ML_STAR.Zyppy_Lysis_Plate.SetMax(ML_STAR.Zyppy_Lysis_Plate.GetTotal());
+ML_STAR.Zyppy_MagClearing_Beads.SetMax(ML_STAR.Zyppy_MagClearing_Beads.GetTotal());
+ML_STAR.Zyppy_MagClearing_Beads_300F_Tips.SetMax(ML_STAR.Zyppy_MagClearing_Beads_300F_Tips.GetTotal());
+ML_STAR.Zyppy_Lysis_Plate.SetCurrentPosition(1);
+ML_STAR.Zyppy_MagClearing_Beads.SetCurrentPosition(1);
+ML_STAR.Zyppy_MagClearing_Beads_300F_Tips.SetCurrentPosition(1);
+}
+// }} ""
+// {{ 99 1 0 "e0725457_8f71_4cde_889e78bbc06fed16" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("e0725457_8f71_4cde_889e78bbc06fed16"); // EasyCOREGripTransport
+}
+// }} ""
+// {{{ 100 1 0 "f9f29d78_22da_4a8c_81f08f4fc5a700b7" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HSS_Shaking(Zyppy_varHHS2, 1100, Zyppy_MagClearing_Beads_Vortex_Duration);
+// }} ""
+// {{ 101 1 0 "b29e294b_cf0c_41d5_b013353e7c752b95" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 4. Dispense 50 킠 of MagClearing Beads and vortex for 10 seconds.");
+// }} ""
+// {{ 102 1 0 "73f19286_7e96_4108_8f211da2f18dd0ab" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 5. Transfer 96-Well Block to a magnetic stand an allow to sit for 5 minutes while beads separate form the lysate. From a depth of about half the length of the well, aspirate and transfer 750 킠 of cleared lysate to a collection Plate. Remove 96-Well Block from magnetic stand.");
+// }} ""
+// {{ 103 1 0 "8a0a0f92_e2bc_4b1c_ae4a0a4c9a07da30" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("8a0a0f92_e2bc_4b1c_ae4a0a4c9a07da30"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 104 1 0 "dee9fa15_ab1e_456a_a23b2f2a3cb9fcd5" "{B31F353E-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer2.SetTimer(Zyppy_MagClearing_Beads_Magnet_Incubation_Duration) )
+{
+    MECC::RaiseRuntimeErrorEx(-1355939584, MECC::IDS::stepNameTimerStart, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 105 1 0 "1a127e61_e6b5_43e8_90af88aab61cea01" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer2.WaitTimer(hslTrue, hslTrue) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 106 1 0 "419810e1_02cd_4b67_99b6cd0670143ed7" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Zyppy_var_Sample_Number == 96)
+{
+// }} ""
+// {{ 107 1 0 "15543325_9619_4e24_aae110d07b60b151" "ML_STAR:{B5EFA722-D37E-4962-AC12-D06E9B2530DD}"
+{
+	variable arrRetValues[];
+	arrRetValues = ML_STAR._B5EFA722_D37E_4962_AC12_D06E9B2530DD("15543325_9619_4e24_aae110d07b60b151"); // OptimizeFollowSpeed
+}
+// }} ""
+// {{ 108 1 0 "500d749c_5f7e_4bb6_9f44c9a7942b3019" "ML_STAR:{E294A9A7-BEFC-4000-9A4C-926B91B8DE1C}"
+{
+	ML_STAR._E294A9A7_BEFC_4000_9A4C_926B91B8DE1C("500d749c_5f7e_4bb6_9f44c9a7942b3019"); // EasyHead96Aspirate
+}
+// }} ""
+// {{ 109 1 0 "7224bc7c_670f_43d9_9c5c17efa9953d47" "ML_STAR:{7DE53592-BBE5-4f1d-B657-161F1AAECA3E}"
+{
+	ML_STAR._7DE53592_BBE5_4f1d_B657_161F1AAECA3E("7224bc7c_670f_43d9_9c5c17efa9953d47"); // EasyHead96Dispense
+}
+// }} ""
+// {{ 110 1 0 "419810e1_02cd_4b67_99b6cd0670143ed7" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 111 1 0 "c67f01db_8a06_41fe_858faabb359d2c76" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+loopCounter7 = 0;
+while (
+   (ML_STAR.Zyppy_Magnet_Deep_Well_Plate.GetCurrentPosition() > 0)
+)
+{
+AlignSequences(hslTrue, ML_STAR.Zyppy_Collection_Plate, 1, ML_STAR.Zyppy_Collection_Plate_Transfer_1000F_Tips, 1, ML_STAR.Zyppy_Magnet_Deep_Well_Plate, 1);
+loopCounter7 = loopCounter7 + 1;
+// }} ""
+// {{ 112 1 0 "5b82531d_4f6b_4ea8_ab0e9d186db39e04" "ML_STAR:{B5EFA722-D37E-4962-AC12-D06E9B2530DD}"
+{
+	variable arrRetValues[];
+	arrRetValues = ML_STAR._B5EFA722_D37E_4962_AC12_D06E9B2530DD("5b82531d_4f6b_4ea8_ab0e9d186db39e04"); // OptimizeFollowSpeed
+}
+// }} ""
+// {{ 113 1 0 "5ae39fd3_5306_4341_a2b4f95f3c202a1f" "ML_STAR:{E91EFCB6-A447-4dfc-828E-7EBF29139CD2}"
+{
+	ML_STAR._E91EFCB6_A447_4dfc_828E_7EBF29139CD2("5ae39fd3_5306_4341_a2b4f95f3c202a1f"); // EasyAspirate
+}
+// }} ""
+// {{ 114 1 0 "78c921ac_ade3_4a54_b7f7fc8b8b3b9cd1" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("78c921ac_ade3_4a54_b7f7fc8b8b3b9cd1"); // EasyDispense
+}
+// }} ""
+// {{ 115 1 0 "c67f01db_8a06_41fe_858faabb359d2c76" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+if (
+   (ML_STAR.Zyppy_Magnet_Deep_Well_Plate.GetCurrentPosition() > 0 && ML_STAR.Zyppy_Magnet_Deep_Well_Plate.GetMax() == 0 )
+)
+{ MECC::EndlessSequenceLoopWarning(GetFileName()); }
+
+}
+ML_STAR.Zyppy_Collection_Plate.SetMax(ML_STAR.Zyppy_Collection_Plate.GetTotal());
+ML_STAR.Zyppy_Collection_Plate_Transfer_1000F_Tips.SetMax(ML_STAR.Zyppy_Collection_Plate_Transfer_1000F_Tips.GetTotal());
+ML_STAR.Zyppy_Magnet_Deep_Well_Plate.SetMax(ML_STAR.Zyppy_Magnet_Deep_Well_Plate.GetTotal());
+ML_STAR.Zyppy_Collection_Plate.SetCurrentPosition(1);
+ML_STAR.Zyppy_Collection_Plate_Transfer_1000F_Tips.SetCurrentPosition(1);
+ML_STAR.Zyppy_Magnet_Deep_Well_Plate.SetCurrentPosition(1);
+}
+// }} ""
+// {{ 116 1 0 "419810e1_02cd_4b67_99b6cd0670143ed7" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 117 1 0 "df34d6a1_63f7_4bf7_97daef5c6b5a0a66" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("df34d6a1_63f7_4bf7_97daef5c6b5a0a66"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 118 1 0 "73f19286_7e96_4108_8f211da2f18dd0ab" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 5. Transfer 96-Well Block to a magnetic stand an allow to sit for 5 minutes while beads separate form the lysate. From a depth of about half the length of the well, aspirate and transfer 750 킠 of cleared lysate to a collection Plate. Remove 96-Well Block from magnetic stand.");
+// }} ""
+// {{ 119 1 0 "f9633ead_d583_416a_8a82b65258523984" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 120 1 0 "cb6a4d8c_a712_4955_9b3e6d3767daedff" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - Hamilton Deck Set-Up\n1. Load 750 킠 of cleared lysate to the Collection Plate and load the Hamilton");
+// }} ""
+// {{ 121 1 0 "22108f03_c29e_4bd3_9d230218b8632320" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialog041DE0AB7AD74199AD5937F2183E5CF6.InitCustomDialog( "22108f03_c29e_4bd3_9d230218b8632320" );
+customDialog041DE0AB7AD74199AD5937F2183E5CF6.ShowCustomDialog();
+// }} ""
+// {{ 122 1 0 "b28a6bfe_46d0_4246_999572f899b3069d" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialogDC842CFB9C2B4f81A7D3B88CE8E24628.InitCustomDialog( "b28a6bfe_46d0_4246_999572f899b3069d" );
+customDialogDC842CFB9C2B4f81A7D3B88CE8E24628.SetCustomDialogProperty( "textBlock4.Text", t_fltMagBindingTotalVolume );
+customDialogDC842CFB9C2B4f81A7D3B88CE8E24628.SetCustomDialogProperty( "textBlock5.Text", t_fltEBTotalVolume );
+customDialogDC842CFB9C2B4f81A7D3B88CE8E24628.ShowCustomDialog();
+// }} ""
+// {{ 123 1 0 "c97f864d_d918_4d7f_8d9fbf75c964bc16" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialog432AB51114A7491e9E18F2019433FEFD.InitCustomDialog( "c97f864d_d918_4d7f_8d9fbf75c964bc16" );
+customDialog432AB51114A7491e9E18F2019433FEFD.SetCustomDialogProperty( "textBlock10.Text", t_intEndoWashBufferVolume );
+customDialog432AB51114A7491e9E18F2019433FEFD.SetCustomDialogProperty( "textBlock11.Text", t_intZyppyWashBufferVolume );
+customDialog432AB51114A7491e9E18F2019433FEFD.SetCustomDialogProperty( "textBlock12.Text", t_intZyppyWashBufferVolume );
+customDialog432AB51114A7491e9E18F2019433FEFD.ShowCustomDialog();
+// }} ""
+// {{ 124 1 0 "cb6a4d8c_a712_4955_9b3e6d3767daedff" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - Hamilton Deck Set-Up\n1. Load 750 킠 of cleared lysate to the Collection Plate and load the Hamilton");
+// }} ""
+// {{ 125 1 0 "f9633ead_d583_416a_8a82b65258523984" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 126 1 0 "2461ac66_a7ee_49ee_9f9dbf0c60e9aa1a" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - (2) PROTOCOL (Deep Blue Lysis Buffer)\nOptional: Automated Deep Blue Lysis Buffer\n1. Remove Air-Permeable Seal\n2. Dispense 100 킠 of Deep Blue Lysis Buffer to each well containing culture and vortex for 10 seconds. Let it sit for 5 minutes\n3. Add 450 킠 of Neutralization Buffer and vortex for 45 seconds.\n4. Dispense 50 킠 of MagClearing Beads and vortex for 10 seconds.\n5. Transfer 96-Well Block to a magnetic stand and allow to sit for 6 minutes. Transfer 750 킠 of cleared lysate to a Collection Plate. ");
+// }} ""
+// {{ 127 1 0 "9671bd77_fb19_485f_bd6fb78d7095b909" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - (3) PROTOCOL (MagBinding Beads)\n1. Dispense 30 킠 of MagBinding Beads to  each well of the Collection Plate.\n2. Transfer Plate to HSS and Vortex for 5 seconds every 30 seconds, for 10 minutes in total.\n3. Place on Magnet for 5 minutes\n4. Remove and discard supernatant");
+// }} ""
+// {{ 128 1 0 "d9aa33c5_1e27_41a9_b8f2bfbdc20bbadb" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - Magbinding Beads Step Variable and Sequence Assignment");
+// }} ""
+// {{ 129 1 0 "b1e67057_417d_4f02_8e9f811b4489a345" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_MagBinding_Beads_Volume = 30;
+// }} ""
+// {{ 130 1 0 "49a4b49a_d961_4e61_bd41bfafc1069eb3" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_MagBinding_Beads_Vortex_Total_Duration = 600;
+// }} ""
+// {{ 131 1 0 "3ed6ee71_bcd1_4e58_a48e4cca2616678c" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_MagBinding_Beads_Vortex_Duration = 5;
+// }} ""
+// {{ 132 1 0 "7017db59_0ca0_4a8b_be0cfd8a9e6f66d8" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_MagBinding_Beads_Vortex_Incubation_Duration = 30;
+// }} ""
+// {{ 133 1 0 "62ce93a6_8e24_4a4c_a303121034b909c5" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_MagBinding_Beads_Magnet_Incubation_Duration = 300;
+// }} ""
+// {{ 134 1 0 "fd7d16ad_71d3_461c_9474911af559ed3d" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_MagBinding_Beads_Supernatant_Removal_Volume = 750;
+// }} ""
+// {{ 135 1 0 "d9aa33c5_1e27_41a9_b8f2bfbdc20bbadb" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - Magbinding Beads Step Variable and Sequence Assignment");
+// }} ""
+// {{ 136 1 0 "84480a3b_7995_4ace_90c38ea4b8bce33b" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 1. Dispense 30 킠 of MagBinding Beads to each well of the Collection Plate");
+// }} ""
+// {{ 137 1 0 "91e67cf8_98e7_4ee6_8a818f5c569d3dd7" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+loopCounter8 = 0;
+while (
+   (ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() > 0)
+)
+{
+AlignSequences(hslTrue, ML_STAR.Zyppy_Collection_Plate, 1, ML_STAR.Zyppy_MagBinding_Beads, 1, ML_STAR.Zyppy_MagBinding_Beads_300F_Tips, 1);
+loopCounter8 = loopCounter8 + 1;
+// }} ""
+// {{ 138 1 0 "cd31d5bc_91d5_4229_92bec5c88393cc0e" "ML_STAR:{E91EFCB6-A447-4dfc-828E-7EBF29139CD2}"
+{
+	ML_STAR._E91EFCB6_A447_4dfc_828E_7EBF29139CD2("cd31d5bc_91d5_4229_92bec5c88393cc0e"); // EasyAspirate
+}
+// }} ""
+// {{ 139 1 0 "68a63f2d_fb07_49b0_92034d17b91ddd02" "{EBC6FD39-B416-4461-BD0E-312FBC5AEF1F}"
+if ( ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() == 0 ) t_intRemainingPositions = 0;
+else t_intRemainingPositions = ML_STAR.Zyppy_Collection_Plate.GetCount() - ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() + 1;
+// }} ""
+// {{ 140 1 0 "ab75751c_0cdc_488b_b9962335b2f835fa" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (t_intRemainingPositions <= 8)
+{
+// }} ""
+// {{ 141 1 0 "dd92c9b0_b377_405e_8a9bd6e9e74d4dcf" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("dd92c9b0_b377_405e_8a9bd6e9e74d4dcf"); // EasyDispense
+}
+// }} ""
+// {{ 142 1 0 "ab75751c_0cdc_488b_b9962335b2f835fa" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 143 1 0 "b7de02ca_1e7d_4aad_a0b514aa37b2366d" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("b7de02ca_1e7d_4aad_a0b514aa37b2366d"); // EasyDispense
+}
+// }} ""
+// {{ 144 1 0 "ab75751c_0cdc_488b_b9962335b2f835fa" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 145 1 0 "91e67cf8_98e7_4ee6_8a818f5c569d3dd7" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+if (
+   (ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() > 0 && ML_STAR.Zyppy_Collection_Plate.GetMax() == 0 )
+)
+{ MECC::EndlessSequenceLoopWarning(GetFileName()); }
+
+}
+ML_STAR.Zyppy_Collection_Plate.SetMax(ML_STAR.Zyppy_Collection_Plate.GetTotal());
+ML_STAR.Zyppy_MagBinding_Beads.SetMax(ML_STAR.Zyppy_MagBinding_Beads.GetTotal());
+ML_STAR.Zyppy_MagBinding_Beads_300F_Tips.SetMax(ML_STAR.Zyppy_MagBinding_Beads_300F_Tips.GetTotal());
+ML_STAR.Zyppy_Collection_Plate.SetCurrentPosition(1);
+ML_STAR.Zyppy_MagBinding_Beads.SetCurrentPosition(1);
+ML_STAR.Zyppy_MagBinding_Beads_300F_Tips.SetCurrentPosition(1);
+}
+// }} ""
+// {{ 146 1 0 "84480a3b_7995_4ace_90c38ea4b8bce33b" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 1. Dispense 30 킠 of MagBinding Beads to each well of the Collection Plate");
+// }} ""
+// {{ 147 1 0 "2a85c600_00fa_4ac4_adcf06cfb99e6342" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 2. Transfer Plate to HSS and Vortex for 5 seconds every 30 seconds, for 10 minutes in total.");
+// }} ""
+// {{ 148 1 0 "6e2274fd_70a9_4d06_852e3431c6fc823a" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("6e2274fd_70a9_4d06_852e3431c6fc823a"); // EasyCOREGripTransport
+}
+// }} ""
+// {{{ 149 1 0 "1ebfef20_0db2_4296_9f6918b2faaaa8a6" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+MagBinding_Bead_HSS_Shaker(Zyppy_MagBinding_Beads_Vortex_Total_Duration, Zyppy_MagBinding_Beads_Vortex_Incubation_Duration, Zyppy_MagBinding_Beads_Vortex_Duration, Zyppy_varHHS1, 1100);
+// }} ""
+// {{ 150 1 0 "2a85c600_00fa_4ac4_adcf06cfb99e6342" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 2. Transfer Plate to HSS and Vortex for 5 seconds every 30 seconds, for 10 minutes in total.");
+// }} ""
+// {{ 151 1 0 "3c4cbce3_1ebd_43e0_b90945c6d2fa447e" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 3. Place on Magnet for 5 minutes");
+// }} ""
+// {{ 152 1 0 "7e75d2f6_ab9e_4a77_a6e6663a121959cb" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("7e75d2f6_ab9e_4a77_a6e6663a121959cb"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 153 1 0 "44555b27_62d7_4222_9f6596e18e923298" "{B31F353E-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer3.SetTimer(Zyppy_MagBinding_Beads_Magnet_Incubation_Duration) )
+{
+    MECC::RaiseRuntimeErrorEx(-1355939584, MECC::IDS::stepNameTimerStart, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 154 1 0 "49c0bb59_59dc_44d2_a40249ab02c5c4c3" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer3.WaitTimer(hslTrue, hslTrue) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 155 1 0 "3c4cbce3_1ebd_43e0_b90945c6d2fa447e" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 3. Place on Magnet for 5 minutes");
+// }} ""
+// {{ 156 1 0 "a0c6b43f_4d9c_4fcc_9dec3038a99e9ba7" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 4. Remove and discard supernatant. Remove 96-Well Block from magnetic stand");
+// }} ""
+// {{ 157 1 0 "f9551f17_6449_4949_9aa7710d58249795" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Zyppy_var_Sample_Number == 96)
+{
+// }} ""
+// {{ 158 1 0 "978b4cbc_56da_4d43_9bc4cb7a9b53bca1" "ML_STAR:{E294A9A7-BEFC-4000-9A4C-926B91B8DE1C}"
+{
+	ML_STAR._E294A9A7_BEFC_4000_9A4C_926B91B8DE1C("978b4cbc_56da_4d43_9bc4cb7a9b53bca1"); // EasyHead96Aspirate
+}
+// }} ""
+// {{ 159 1 0 "810907e2_73e3_4e39_991b0ca27d7ec197" "ML_STAR:{7DE53592-BBE5-4f1d-B657-161F1AAECA3E}"
+{
+	ML_STAR._7DE53592_BBE5_4f1d_B657_161F1AAECA3E("810907e2_73e3_4e39_991b0ca27d7ec197"); // EasyHead96Dispense
+}
+// }} ""
+// {{ 160 1 0 "f9551f17_6449_4949_9aa7710d58249795" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 161 1 0 "37f9dce9_247d_44f3_bcaf10a018fc3482" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+loopCounter7 = 0;
+while (
+   (ML_STAR.Zyppy_Magnet_MIDI_Plate.GetCurrentPosition() > 0)
+)
+{
+AlignSequences(hslTrue, ML_STAR.Zyppy_96_Gravity_Waste, 1, ML_STAR.Zyppy_MagBinding_Beads_Supernatant_Removal_1000F_Tips, 1, ML_STAR.Zyppy_Magnet_MIDI_Plate, 1);
+loopCounter7 = loopCounter7 + 1;
+// }} ""
+// {{ 162 1 0 "ec191ae6_fa96_4a6c_9220df4d5f9c9b52" "ML_STAR:{E91EFCB6-A447-4dfc-828E-7EBF29139CD2}"
+{
+	ML_STAR._E91EFCB6_A447_4dfc_828E_7EBF29139CD2("ec191ae6_fa96_4a6c_9220df4d5f9c9b52"); // EasyAspirate
+}
+// }} ""
+// {{ 163 1 0 "f57ba482_e8b0_43f6_ae64d35bcc2f1414" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("f57ba482_e8b0_43f6_ae64d35bcc2f1414"); // EasyDispense
+}
+// }} ""
+// {{ 164 1 0 "37f9dce9_247d_44f3_bcaf10a018fc3482" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+if (
+   (ML_STAR.Zyppy_Magnet_MIDI_Plate.GetCurrentPosition() > 0 && ML_STAR.Zyppy_Magnet_MIDI_Plate.GetMax() == 0 )
+)
+{ MECC::EndlessSequenceLoopWarning(GetFileName()); }
+
+}
+ML_STAR.Zyppy_96_Gravity_Waste.SetMax(ML_STAR.Zyppy_96_Gravity_Waste.GetTotal());
+ML_STAR.Zyppy_MagBinding_Beads_Supernatant_Removal_1000F_Tips.SetMax(ML_STAR.Zyppy_MagBinding_Beads_Supernatant_Removal_1000F_Tips.GetTotal());
+ML_STAR.Zyppy_Magnet_MIDI_Plate.SetMax(ML_STAR.Zyppy_Magnet_MIDI_Plate.GetTotal());
+ML_STAR.Zyppy_96_Gravity_Waste.SetCurrentPosition(1);
+ML_STAR.Zyppy_MagBinding_Beads_Supernatant_Removal_1000F_Tips.SetCurrentPosition(1);
+ML_STAR.Zyppy_Magnet_MIDI_Plate.SetCurrentPosition(1);
+}
+// }} ""
+// {{ 165 1 0 "f9551f17_6449_4949_9aa7710d58249795" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 166 1 0 "9b6e70f1_fa42_4f02_b08b46db04ca4cc3" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("9b6e70f1_fa42_4f02_b08b46db04ca4cc3"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 167 1 0 "a0c6b43f_4d9c_4fcc_9dec3038a99e9ba7" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 4. Remove and discard supernatant. Remove 96-Well Block from magnetic stand");
+// }} ""
+// {{ 168 1 0 "9671bd77_fb19_485f_bd6fb78d7095b909" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - (3) PROTOCOL (MagBinding Beads)\n1. Dispense 30 킠 of MagBinding Beads to  each well of the Collection Plate.\n2. Transfer Plate to HSS and Vortex for 5 seconds every 30 seconds, for 10 minutes in total.\n3. Place on Magnet for 5 minutes\n4. Remove and discard supernatant");
+// }} ""
+// {{ 169 1 0 "e20a39fb_a853_4de6_9d1af2c2059b5258" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - (4) PROTOCOL (Endo-Wash Buffer)\n1. Dispense 200 킠 of Endo-Wash Buffer to each well of the plate.\n2. Transfer to HHS and Vortex for 30 seconds to re-suspend beads.\n3. Transfer Collection Plate to magnetic stand and incubate for 2 minutes.\n4. Remove and discard Supernatant. Remove 96-Well Block from magnetic stand. ");
+// }} ""
+// {{ 170 1 0 "4d671835_444f_4459_8f4ccbafbd02c450" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - Endo Wash Buffer Step Variable and Sequence Assignment");
+// }} ""
+// {{ 171 1 0 "b15fae7f_8039_429b_91b921342f464559" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Endo_Wash_Buffer_Volume = 200;
+// }} ""
+// {{ 172 1 0 "24932c3f_a634_4c02_bae3394d3f133689" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Endo_Wash_Buffer_Vortex_Duration = 30;
+// }} ""
+// {{ 173 1 0 "b5425752_a63e_4c3e_b1eba6eadacc2e87" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Endo_Wash_Buffer_Magnet_Incubation_Duration = 120;
+// }} ""
+// {{ 174 1 0 "0358e1c3_a491_44c8_a743e063233e0da5" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Endo_Wash_Buffer_Supernatant_Removal_Volume = 250;
+// }} ""
+// {{ 175 1 0 "4d671835_444f_4459_8f4ccbafbd02c450" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - Endo Wash Buffer Step Variable and Sequence Assignment");
+// }} ""
+// {{ 176 1 0 "f54fce90_0c15_4ca8_a287a7b4fd10c0d2" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 1. Dispense 200 킠 of Endo-Wash Buffer to each well of the plate.");
+// }} ""
+// {{ 177 1 0 "0815de5d_c102_4884_82b4e92187750131" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+loopCounter8 = 0;
+while (
+   (ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() > 0)
+)
+{
+AlignSequences(hslTrue, ML_STAR.Zyppy_Collection_Plate, 1, ML_STAR.Zyppy_Endo_Wash_Buffer, 1, ML_STAR.Zyppy_Endo_Wash_Buffer_Transfer_300F_Tips, 1);
+loopCounter8 = loopCounter8 + 1;
+// }} ""
+// {{ 178 1 0 "55bf95e9_9a50_4d38_b0199a2d0870fbb3" "ML_STAR:{E91EFCB6-A447-4dfc-828E-7EBF29139CD2}"
+{
+	ML_STAR._E91EFCB6_A447_4dfc_828E_7EBF29139CD2("55bf95e9_9a50_4d38_b0199a2d0870fbb3"); // EasyAspirate
+}
+// }} ""
+// {{ 179 1 0 "266c209a_c9f5_4cc4_a5f55fce88d2e09a" "{EBC6FD39-B416-4461-BD0E-312FBC5AEF1F}"
+if ( ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() == 0 ) t_intRemainingPositions = 0;
+else t_intRemainingPositions = ML_STAR.Zyppy_Collection_Plate.GetCount() - ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() + 1;
+// }} ""
+// {{ 180 1 0 "b58a2eb0_f606_4583_9bd0850cc8faea43" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (t_intRemainingPositions <= 8)
+{
+// }} ""
+// {{ 181 1 0 "42904903_5dc1_491b_b9e02e5a18412ba7" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("42904903_5dc1_491b_b9e02e5a18412ba7"); // EasyDispense
+}
+// }} ""
+// {{ 182 1 0 "b58a2eb0_f606_4583_9bd0850cc8faea43" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 183 1 0 "dac87d4d_4b51_444b_89249386c53b9058" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("dac87d4d_4b51_444b_89249386c53b9058"); // EasyDispense
+}
+// }} ""
+// {{ 184 1 0 "b58a2eb0_f606_4583_9bd0850cc8faea43" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 185 1 0 "0815de5d_c102_4884_82b4e92187750131" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+if (
+   (ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() > 0 && ML_STAR.Zyppy_Collection_Plate.GetMax() == 0 )
+)
+{ MECC::EndlessSequenceLoopWarning(GetFileName()); }
+
+}
+ML_STAR.Zyppy_Collection_Plate.SetMax(ML_STAR.Zyppy_Collection_Plate.GetTotal());
+ML_STAR.Zyppy_Endo_Wash_Buffer.SetMax(ML_STAR.Zyppy_Endo_Wash_Buffer.GetTotal());
+ML_STAR.Zyppy_Endo_Wash_Buffer_Transfer_300F_Tips.SetMax(ML_STAR.Zyppy_Endo_Wash_Buffer_Transfer_300F_Tips.GetTotal());
+ML_STAR.Zyppy_Collection_Plate.SetCurrentPosition(1);
+ML_STAR.Zyppy_Endo_Wash_Buffer.SetCurrentPosition(1);
+ML_STAR.Zyppy_Endo_Wash_Buffer_Transfer_300F_Tips.SetCurrentPosition(1);
+}
+// }} ""
+// {{ 186 1 0 "f54fce90_0c15_4ca8_a287a7b4fd10c0d2" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 1. Dispense 200 킠 of Endo-Wash Buffer to each well of the plate.");
+// }} ""
+// {{ 187 1 0 "98e05faa_4ec6_454d_a4cc6046586a6b8e" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 2. Transfer to HHS and Vortex for 30 seconds to re-suspend beads.");
+// }} ""
+// {{ 188 1 0 "831c5d27_4620_4db2_925915a5a00f5ed3" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("831c5d27_4620_4db2_925915a5a00f5ed3"); // EasyCOREGripTransport
+}
+// }} ""
+// {{{ 189 1 0 "5aa832d4_1cf0_44a1_8c6adbfc1dfe3540" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HSS_Shaking(Zyppy_varHHS1, 1100, Zyppy_Endo_Wash_Buffer_Vortex_Duration);
+// }} ""
+// {{ 190 1 0 "98e05faa_4ec6_454d_a4cc6046586a6b8e" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 2. Transfer to HHS and Vortex for 30 seconds to re-suspend beads.");
+// }} ""
+// {{ 191 1 0 "c8443e7f_3229_4864_8e850fd216b45c69" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 3. Transfer Collection Plate to magnetic stand and incubate for 2 minutes.");
+// }} ""
+// {{ 192 1 0 "c44c96ad_c8ae_4dab_8ccc89e63493105f" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("c44c96ad_c8ae_4dab_8ccc89e63493105f"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 193 1 0 "a747e1a4_0583_4f66_9eaa942069558129" "{B31F353E-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer4.SetTimer(Zyppy_Endo_Wash_Buffer_Magnet_Incubation_Duration) )
+{
+    MECC::RaiseRuntimeErrorEx(-1355939584, MECC::IDS::stepNameTimerStart, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 194 1 0 "27d14d4a_95ca_4554_9689794047b04f84" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer4.WaitTimer(hslTrue, hslTrue) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 195 1 0 "c8443e7f_3229_4864_8e850fd216b45c69" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 3. Transfer Collection Plate to magnetic stand and incubate for 2 minutes.");
+// }} ""
+// {{ 196 1 0 "8a699ecd_daef_4ac2_8ad3546462d1d182" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 4. Remove and discard Supernatant. Remove 96-Well Block from magnetic stand. ");
+// }} ""
+// {{ 197 1 0 "6a300103_67ce_4a4a_a969eb17aeb70b78" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Zyppy_var_Sample_Number == 96)
+{
+// }} ""
+// {{ 198 1 0 "282613c4_1e27_48d6_b4c3c07757126682" "ML_STAR:{E294A9A7-BEFC-4000-9A4C-926B91B8DE1C}"
+{
+	ML_STAR._E294A9A7_BEFC_4000_9A4C_926B91B8DE1C("282613c4_1e27_48d6_b4c3c07757126682"); // EasyHead96Aspirate
+}
+// }} ""
+// {{ 199 1 0 "b1057a2a_cff0_420d_9bc7c6d04d582ba5" "ML_STAR:{7DE53592-BBE5-4f1d-B657-161F1AAECA3E}"
+{
+	ML_STAR._7DE53592_BBE5_4f1d_B657_161F1AAECA3E("b1057a2a_cff0_420d_9bc7c6d04d582ba5"); // EasyHead96Dispense
+}
+// }} ""
+// {{ 200 1 0 "6a300103_67ce_4a4a_a969eb17aeb70b78" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 201 1 0 "c56d19aa_f025_4ad2_b4ebf8052bae5ff4" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+loopCounter7 = 0;
+while (
+   (ML_STAR.Zyppy_Magnet_MIDI_Plate.GetCurrentPosition() > 0)
+)
+{
+AlignSequences(hslTrue, ML_STAR.Zyppy_96_Gravity_Waste, 1, ML_STAR.Zyppy_Endo_Wash_Buffer_Transfer_300F_Tips, 1, ML_STAR.Zyppy_Magnet_MIDI_Plate, 1);
+loopCounter7 = loopCounter7 + 1;
+// }} ""
+// {{ 202 1 0 "19b895b8_8a55_435b_88b2ac48bf96eefb" "ML_STAR:{E91EFCB6-A447-4dfc-828E-7EBF29139CD2}"
+{
+	ML_STAR._E91EFCB6_A447_4dfc_828E_7EBF29139CD2("19b895b8_8a55_435b_88b2ac48bf96eefb"); // EasyAspirate
+}
+// }} ""
+// {{ 203 1 0 "44518c7a_4556_4939_a5ed4ec07e36444d" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("44518c7a_4556_4939_a5ed4ec07e36444d"); // EasyDispense
+}
+// }} ""
+// {{ 204 1 0 "c56d19aa_f025_4ad2_b4ebf8052bae5ff4" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+if (
+   (ML_STAR.Zyppy_Magnet_MIDI_Plate.GetCurrentPosition() > 0 && ML_STAR.Zyppy_Magnet_MIDI_Plate.GetMax() == 0 )
+)
+{ MECC::EndlessSequenceLoopWarning(GetFileName()); }
+
+}
+ML_STAR.Zyppy_96_Gravity_Waste.SetMax(ML_STAR.Zyppy_96_Gravity_Waste.GetTotal());
+ML_STAR.Zyppy_Endo_Wash_Buffer_Transfer_300F_Tips.SetMax(ML_STAR.Zyppy_Endo_Wash_Buffer_Transfer_300F_Tips.GetTotal());
+ML_STAR.Zyppy_Magnet_MIDI_Plate.SetMax(ML_STAR.Zyppy_Magnet_MIDI_Plate.GetTotal());
+ML_STAR.Zyppy_96_Gravity_Waste.SetCurrentPosition(1);
+ML_STAR.Zyppy_Endo_Wash_Buffer_Transfer_300F_Tips.SetCurrentPosition(1);
+ML_STAR.Zyppy_Magnet_MIDI_Plate.SetCurrentPosition(1);
+}
+// }} ""
+// {{ 205 1 0 "6a300103_67ce_4a4a_a969eb17aeb70b78" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 206 1 0 "320c541f_aa8d_4d0c_8410c8ece5e4b781" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("320c541f_aa8d_4d0c_8410c8ece5e4b781"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 207 1 0 "8a699ecd_daef_4ac2_8ad3546462d1d182" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 4. Remove and discard Supernatant. Remove 96-Well Block from magnetic stand. ");
+// }} ""
+// {{ 208 1 0 "e20a39fb_a853_4de6_9d1af2c2059b5258" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - (4) PROTOCOL (Endo-Wash Buffer)\n1. Dispense 200 킠 of Endo-Wash Buffer to each well of the plate.\n2. Transfer to HHS and Vortex for 30 seconds to re-suspend beads.\n3. Transfer Collection Plate to magnetic stand and incubate for 2 minutes.\n4. Remove and discard Supernatant. Remove 96-Well Block from magnetic stand. ");
+// }} ""
+// {{ 209 1 0 "28ace73b_f076_414f_a1d4850def9c7abf" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - (5) PROTOCOL (Zyppy Wash Buffer 1)\n1. Dispense 400 킠 of Zyppy Wash Buffer to each well of the plate.\n2. Transfer to HHS and Vortex for 30 seconds to re-suspend beads.\n3. Transfer Collection Plate to magnetic stand and incubate for 2 minutes.\n4. Remove and discard Supernatant. Remove 96-Well Block from magnetic stand. ");
+// }} ""
+// {{ 210 1 0 "292e107a_d382_45cf_af34e612e82cfe50" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - Zyppy Wash Buffer Step Variable and Sequence Assignment");
+// }} ""
+// {{ 211 1 0 "94bf97bc_c5a2_4a74_b2e4b3630a6e7f3f" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Zyppy_Wash_Buffer_Volume = 400;
+// }} ""
+// {{ 212 1 0 "ad803ccb_0211_4248_9be5538e5c8d4b8b" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Zyppy_Wash_Buffer_Vortex_Duration = 30;
+// }} ""
+// {{ 213 1 0 "12c11d94_74d2_4ca4_90580825a58907a6" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Zyppy_Wash_Buffer_Magnet_Incubation_Duration = 120;
+// }} ""
+// {{ 214 1 0 "528b671c_d1f9_4da2_a031267d96b7c6fe" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Zyppy_Wash_Buffer_Supernatant_Removal_Volume = 450;
+// }} ""
+// {{ 215 1 0 "292e107a_d382_45cf_af34e612e82cfe50" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - Zyppy Wash Buffer Step Variable and Sequence Assignment");
+// }} ""
+// {{ 216 1 0 "e1224a55_93df_4209_9643fc1a1d405cc4" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 1. Dispense 400 킠 of Zyppy Wash Buffer to each well of the plate.");
+// }} ""
+// {{ 217 1 0 "2a59abe3_a4fe_4d1b_92dcbd6c028f721a" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+loopCounter8 = 0;
+while (
+   (ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() > 0)
+)
+{
+AlignSequences(hslTrue, ML_STAR.Zyppy_Collection_Plate, 1, ML_STAR.Zyppy_Wash_Buffer_1, 1, ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_1_1000F_Tips, 1);
+loopCounter8 = loopCounter8 + 1;
+// }} ""
+// {{ 218 1 0 "cac29ec8_5206_442b_92345266af3c3dbb" "ML_STAR:{E91EFCB6-A447-4dfc-828E-7EBF29139CD2}"
+{
+	ML_STAR._E91EFCB6_A447_4dfc_828E_7EBF29139CD2("cac29ec8_5206_442b_92345266af3c3dbb"); // EasyAspirate
+}
+// }} ""
+// {{ 219 1 0 "3100f58b_42c7_48a7_9cb5ecf1447b40cc" "{EBC6FD39-B416-4461-BD0E-312FBC5AEF1F}"
+if ( ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() == 0 ) t_intRemainingPositions = 0;
+else t_intRemainingPositions = ML_STAR.Zyppy_Collection_Plate.GetCount() - ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() + 1;
+// }} ""
+// {{ 220 1 0 "a99ad46f_8a85_4763_a6bbd22a2f326c95" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (t_intRemainingPositions <= 8)
+{
+// }} ""
+// {{ 221 1 0 "634e5e76_fdb3_4033_8d861f62da1a0f67" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("634e5e76_fdb3_4033_8d861f62da1a0f67"); // EasyDispense
+}
+// }} ""
+// {{ 222 1 0 "a99ad46f_8a85_4763_a6bbd22a2f326c95" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 223 1 0 "270281e0_122e_4b42_a38c8382fb003f44" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("270281e0_122e_4b42_a38c8382fb003f44"); // EasyDispense
+}
+// }} ""
+// {{ 224 1 0 "a99ad46f_8a85_4763_a6bbd22a2f326c95" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 225 1 0 "2a59abe3_a4fe_4d1b_92dcbd6c028f721a" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+if (
+   (ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() > 0 && ML_STAR.Zyppy_Collection_Plate.GetMax() == 0 )
+)
+{ MECC::EndlessSequenceLoopWarning(GetFileName()); }
+
+}
+ML_STAR.Zyppy_Collection_Plate.SetMax(ML_STAR.Zyppy_Collection_Plate.GetTotal());
+ML_STAR.Zyppy_Wash_Buffer_1.SetMax(ML_STAR.Zyppy_Wash_Buffer_1.GetTotal());
+ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_1_1000F_Tips.SetMax(ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_1_1000F_Tips.GetTotal());
+ML_STAR.Zyppy_Collection_Plate.SetCurrentPosition(1);
+ML_STAR.Zyppy_Wash_Buffer_1.SetCurrentPosition(1);
+ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_1_1000F_Tips.SetCurrentPosition(1);
+}
+// }} ""
+// {{ 226 1 0 "e1224a55_93df_4209_9643fc1a1d405cc4" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 1. Dispense 400 킠 of Zyppy Wash Buffer to each well of the plate.");
+// }} ""
+// {{ 227 1 0 "cd750809_f04b_48b1_9a04a6d592da2bdb" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 2. Transfer to HHS and Vortex for 30 seconds to re-suspend beads.");
+// }} ""
+// {{ 228 1 0 "38f82380_3338_4819_b4c4c378ebb05034" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("38f82380_3338_4819_b4c4c378ebb05034"); // EasyCOREGripTransport
+}
+// }} ""
+// {{{ 229 1 0 "ee129629_3b96_4156_930a8a29f98ee8eb" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HSS_Shaking(Zyppy_varHHS1, 1100, Zyppy_Zyppy_Wash_Buffer_Vortex_Duration);
+// }} ""
+// {{ 230 1 0 "cd750809_f04b_48b1_9a04a6d592da2bdb" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 2. Transfer to HHS and Vortex for 30 seconds to re-suspend beads.");
+// }} ""
+// {{ 231 1 0 "621b0e8e_a5fb_4958_b9268e97e97b6962" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 3. Transfer Collection Plate to magnetic stand and incubate for 2 minutes.");
+// }} ""
+// {{ 232 1 0 "3dfc121f_22c1_4862_88301c0951315314" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("3dfc121f_22c1_4862_88301c0951315314"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 233 1 0 "a971dbcb_8990_4bf1_8c1d074acc3891d7" "{B31F353E-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer4.SetTimer(Zyppy_Zyppy_Wash_Buffer_Magnet_Incubation_Duration) )
+{
+    MECC::RaiseRuntimeErrorEx(-1355939584, MECC::IDS::stepNameTimerStart, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 234 1 0 "7c950422_3a45_4488_ae630ae3f0f75e7c" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer4.WaitTimer(hslTrue, hslTrue) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 235 1 0 "621b0e8e_a5fb_4958_b9268e97e97b6962" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 3. Transfer Collection Plate to magnetic stand and incubate for 2 minutes.");
+// }} ""
+// {{ 236 1 0 "13195553_1399_4789_a94e28d0ee2fba8a" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 4. Remove and discard Supernatant. Remove 96-Well Block from magnetic stand. ");
+// }} ""
+// {{ 237 1 0 "0cec7cfd_d940_4697_b39ac5c05aa55db7" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Zyppy_var_Sample_Number == 96)
+{
+// }} ""
+// {{ 238 1 0 "86822321_2e8e_4de3_933abc56a63e2de1" "ML_STAR:{E294A9A7-BEFC-4000-9A4C-926B91B8DE1C}"
+{
+	ML_STAR._E294A9A7_BEFC_4000_9A4C_926B91B8DE1C("86822321_2e8e_4de3_933abc56a63e2de1"); // EasyHead96Aspirate
+}
+// }} ""
+// {{ 239 1 0 "1ab2b93e_44e9_4a8c_861ec8814ba7c912" "ML_STAR:{7DE53592-BBE5-4f1d-B657-161F1AAECA3E}"
+{
+	ML_STAR._7DE53592_BBE5_4f1d_B657_161F1AAECA3E("1ab2b93e_44e9_4a8c_861ec8814ba7c912"); // EasyHead96Dispense
+}
+// }} ""
+// {{ 240 1 0 "0cec7cfd_d940_4697_b39ac5c05aa55db7" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 241 1 0 "a93b5ea8_4ed8_4b4d_88a7683624345e16" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+loopCounter7 = 0;
+while (
+   (ML_STAR.Zyppy_Magnet_MIDI_Plate.GetCurrentPosition() > 0)
+)
+{
+AlignSequences(hslTrue, ML_STAR.Zyppy_96_Gravity_Waste, 1, ML_STAR.Zyppy_Magnet_MIDI_Plate, 1, ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_1_1000F_Tips, 1);
+loopCounter7 = loopCounter7 + 1;
+// }} ""
+// {{ 242 1 0 "8b5b3538_0aa9_4836_a2c2349aee81d261" "ML_STAR:{E91EFCB6-A447-4dfc-828E-7EBF29139CD2}"
+{
+	ML_STAR._E91EFCB6_A447_4dfc_828E_7EBF29139CD2("8b5b3538_0aa9_4836_a2c2349aee81d261"); // EasyAspirate
+}
+// }} ""
+// {{ 243 1 0 "fecec163_bd3e_40be_870d7ce03ac281a8" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("fecec163_bd3e_40be_870d7ce03ac281a8"); // EasyDispense
+}
+// }} ""
+// {{ 244 1 0 "a93b5ea8_4ed8_4b4d_88a7683624345e16" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+if (
+   (ML_STAR.Zyppy_Magnet_MIDI_Plate.GetCurrentPosition() > 0 && ML_STAR.Zyppy_Magnet_MIDI_Plate.GetMax() == 0 )
+)
+{ MECC::EndlessSequenceLoopWarning(GetFileName()); }
+
+}
+ML_STAR.Zyppy_96_Gravity_Waste.SetMax(ML_STAR.Zyppy_96_Gravity_Waste.GetTotal());
+ML_STAR.Zyppy_Magnet_MIDI_Plate.SetMax(ML_STAR.Zyppy_Magnet_MIDI_Plate.GetTotal());
+ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_1_1000F_Tips.SetMax(ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_1_1000F_Tips.GetTotal());
+ML_STAR.Zyppy_96_Gravity_Waste.SetCurrentPosition(1);
+ML_STAR.Zyppy_Magnet_MIDI_Plate.SetCurrentPosition(1);
+ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_1_1000F_Tips.SetCurrentPosition(1);
+}
+// }} ""
+// {{ 245 1 0 "0cec7cfd_d940_4697_b39ac5c05aa55db7" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 246 1 0 "7f0c4dfa_34a1_4450_91a559ec16751fbf" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("7f0c4dfa_34a1_4450_91a559ec16751fbf"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 247 1 0 "13195553_1399_4789_a94e28d0ee2fba8a" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 4. Remove and discard Supernatant. Remove 96-Well Block from magnetic stand. ");
+// }} ""
+// {{ 248 1 0 "28ace73b_f076_414f_a1d4850def9c7abf" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - (5) PROTOCOL (Zyppy Wash Buffer 1)\n1. Dispense 400 킠 of Zyppy Wash Buffer to each well of the plate.\n2. Transfer to HHS and Vortex for 30 seconds to re-suspend beads.\n3. Transfer Collection Plate to magnetic stand and incubate for 2 minutes.\n4. Remove and discard Supernatant. Remove 96-Well Block from magnetic stand. ");
+// }} ""
+// {{ 249 1 0 "709e1a6d_51fb_4e76_96003f834fd74ca6" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - (6) PROTOCOL (Zyppy Wash Buffer 2)\n1. Dispense 400 킠 of Zyppy Wash Buffer to each well of the plate.\n2. Transfer to HHS and Vortex for 30 seconds to re-suspend beads.\n3. Transfer Collection Plate to magnetic stand and incubate for 2 minutes.\n4. Remove and discard Supernatant. Remove 96-Well Block from magnetic stand to HHS. ");
+// }} ""
+// {{ 250 1 0 "407e18c9_91b5_48e9_914b2d42394d81b2" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - Zyppy Wash Buffer Step Variable and Sequence Assignment");
+// }} ""
+// {{ 251 1 0 "9fad09e9_1ed9_456d_91b45e142b57ef05" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Zyppy_Wash_Buffer_Volume = 400;
+// }} ""
+// {{ 252 1 0 "a3cdfe72_1b4a_4114_b7cd4c469de16258" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Zyppy_Wash_Buffer_Vortex_Duration = 30;
+// }} ""
+// {{ 253 1 0 "e76f8c2e_842a_4fc4_8e479bbbab4f3bc7" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Zyppy_Wash_Buffer_Magnet_Incubation_Duration = 120;
+// }} ""
+// {{ 254 1 0 "d1a9290c_dfa1_4b61_b44d1c5f567d3e08" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Zyppy_Wash_Buffer_Supernatant_Removal_Volume = 450;
+// }} ""
+// {{ 255 1 0 "407e18c9_91b5_48e9_914b2d42394d81b2" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - Zyppy Wash Buffer Step Variable and Sequence Assignment");
+// }} ""
+// {{ 256 1 0 "94f647ff_d0f2_4fa8_9f7484021ce54b98" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 1. Dispense 400 킠 of Zyppy Wash Buffer to each well of the plate.");
+// }} ""
+// {{ 257 1 0 "9c8bf96a_6c0d_4c5c_9bf9ba80a56e0f20" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+loopCounter8 = 0;
+while (
+   (ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() > 0)
+)
+{
+AlignSequences(hslTrue, ML_STAR.Zyppy_Collection_Plate, 1, ML_STAR.Zyppy_Wash_Buffer_2, 1, ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_2_1000F_Tips, 1);
+loopCounter8 = loopCounter8 + 1;
+// }} ""
+// {{ 258 1 0 "7babe1a0_d10e_40a1_b9ffb93926aa9389" "ML_STAR:{E91EFCB6-A447-4dfc-828E-7EBF29139CD2}"
+{
+	ML_STAR._E91EFCB6_A447_4dfc_828E_7EBF29139CD2("7babe1a0_d10e_40a1_b9ffb93926aa9389"); // EasyAspirate
+}
+// }} ""
+// {{ 259 1 0 "24f8ce06_45ad_4dfc_812e0993dc49eefa" "{EBC6FD39-B416-4461-BD0E-312FBC5AEF1F}"
+if ( ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() == 0 ) t_intRemainingPositions = 0;
+else t_intRemainingPositions = ML_STAR.Zyppy_Collection_Plate.GetCount() - ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() + 1;
+// }} ""
+// {{ 260 1 0 "6bd49a8c_6a2b_466d_82943c166c6443d1" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (t_intRemainingPositions <= 8)
+{
+// }} ""
+// {{ 261 1 0 "982a0d43_8984_489a_82505c3ad5971db6" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("982a0d43_8984_489a_82505c3ad5971db6"); // EasyDispense
+}
+// }} ""
+// {{ 262 1 0 "6bd49a8c_6a2b_466d_82943c166c6443d1" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 263 1 0 "b0f72783_9737_4f68_b88cef166ace4c2f" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("b0f72783_9737_4f68_b88cef166ace4c2f"); // EasyDispense
+}
+// }} ""
+// {{ 264 1 0 "6bd49a8c_6a2b_466d_82943c166c6443d1" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 265 1 0 "9c8bf96a_6c0d_4c5c_9bf9ba80a56e0f20" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+if (
+   (ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() > 0 && ML_STAR.Zyppy_Collection_Plate.GetMax() == 0 )
+)
+{ MECC::EndlessSequenceLoopWarning(GetFileName()); }
+
+}
+ML_STAR.Zyppy_Collection_Plate.SetMax(ML_STAR.Zyppy_Collection_Plate.GetTotal());
+ML_STAR.Zyppy_Wash_Buffer_2.SetMax(ML_STAR.Zyppy_Wash_Buffer_2.GetTotal());
+ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_2_1000F_Tips.SetMax(ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_2_1000F_Tips.GetTotal());
+ML_STAR.Zyppy_Collection_Plate.SetCurrentPosition(1);
+ML_STAR.Zyppy_Wash_Buffer_2.SetCurrentPosition(1);
+ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_2_1000F_Tips.SetCurrentPosition(1);
+}
+// }} ""
+// {{ 266 1 0 "94f647ff_d0f2_4fa8_9f7484021ce54b98" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 1. Dispense 400 킠 of Zyppy Wash Buffer to each well of the plate.");
+// }} ""
+// {{ 267 1 0 "097bc71a_cfd7_4f5f_94e86810c4fe98f8" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 2. Transfer to HHS and Vortex for 30 seconds to re-suspend beads.");
+// }} ""
+// {{ 268 1 0 "e21ab14d_533d_45af_b222fa22ea56268a" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("e21ab14d_533d_45af_b222fa22ea56268a"); // EasyCOREGripTransport
+}
+// }} ""
+// {{{ 269 1 0 "ffa3fbdd_2251_4f5f_adbd774eadae7482" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HSS_Shaking(Zyppy_varHHS1, 1100, Zyppy_Zyppy_Wash_Buffer_Vortex_Duration);
+// }} ""
+// {{ 270 1 0 "097bc71a_cfd7_4f5f_94e86810c4fe98f8" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 2. Transfer to HHS and Vortex for 30 seconds to re-suspend beads.");
+// }} ""
+// {{ 271 1 0 "505d23ee_ffee_49cb_879e7504edd35532" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 3. Transfer Collection Plate to magnetic stand and incubate for 2 minutes.");
+// }} ""
+// {{ 272 1 0 "395cf1d4_13a4_47f2_bcaa4a92016cd661" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("395cf1d4_13a4_47f2_bcaa4a92016cd661"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 273 1 0 "4a435971_7cfd_402c_a6501ff6f04d3bdd" "{B31F353E-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer4.SetTimer(Zyppy_Zyppy_Wash_Buffer_Magnet_Incubation_Duration) )
+{
+    MECC::RaiseRuntimeErrorEx(-1355939584, MECC::IDS::stepNameTimerStart, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 274 1 0 "16e369a0_8c6c_4204_b64d48e406924efd" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer4.WaitTimer(hslTrue, hslTrue) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 275 1 0 "505d23ee_ffee_49cb_879e7504edd35532" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 3. Transfer Collection Plate to magnetic stand and incubate for 2 minutes.");
+// }} ""
+// {{ 276 1 0 "4dd93e78_d959_4c44_ad73f9c14c0570a9" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 4. Remove and discard Supernatant. Remove 96-Well Block from magnetic stand to HHS. ");
+// }} ""
+// {{ 277 1 0 "df3de30e_3048_4370_a44497eae15eeecc" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+if (Zyppy_var_Sample_Number == 96)
+{
+// }} ""
+// {{ 278 1 0 "fe94ca56_042a_41e9_a62d9893e18ef2d6" "ML_STAR:{E294A9A7-BEFC-4000-9A4C-926B91B8DE1C}"
+{
+	ML_STAR._E294A9A7_BEFC_4000_9A4C_926B91B8DE1C("fe94ca56_042a_41e9_a62d9893e18ef2d6"); // EasyHead96Aspirate
+}
+// }} ""
+// {{ 279 1 0 "95da8478_5ace_4dff_9c81b6355a55a6a1" "ML_STAR:{7DE53592-BBE5-4f1d-B657-161F1AAECA3E}"
+{
+	ML_STAR._7DE53592_BBE5_4f1d_B657_161F1AAECA3E("95da8478_5ace_4dff_9c81b6355a55a6a1"); // EasyHead96Dispense
+}
+// }} ""
+// {{ 280 1 0 "df3de30e_3048_4370_a44497eae15eeecc" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+else
+{
+// }} ""
+// {{ 281 1 0 "2917e0f7_0225_4dc2_ab75b8b844c7e919" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+loopCounter7 = 0;
+while (
+   (ML_STAR.Zyppy_Magnet_MIDI_Plate.GetCurrentPosition() > 0)
+)
+{
+AlignSequences(hslTrue, ML_STAR.Zyppy_96_Gravity_Waste, 1, ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_2_1000F_Tips, 1, ML_STAR.Zyppy_Magnet_MIDI_Plate, 1);
+loopCounter7 = loopCounter7 + 1;
+// }} ""
+// {{ 282 1 0 "35a2c5a7_7fba_4346_9cdc9960422a478d" "ML_STAR:{E91EFCB6-A447-4dfc-828E-7EBF29139CD2}"
+{
+	ML_STAR._E91EFCB6_A447_4dfc_828E_7EBF29139CD2("35a2c5a7_7fba_4346_9cdc9960422a478d"); // EasyAspirate
+}
+// }} ""
+// {{ 283 1 0 "5376ca27_41bd_4eed_810171bfaf685825" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("5376ca27_41bd_4eed_810171bfaf685825"); // EasyDispense
+}
+// }} ""
+// {{ 284 1 0 "2917e0f7_0225_4dc2_ab75b8b844c7e919" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+if (
+   (ML_STAR.Zyppy_Magnet_MIDI_Plate.GetCurrentPosition() > 0 && ML_STAR.Zyppy_Magnet_MIDI_Plate.GetMax() == 0 )
+)
+{ MECC::EndlessSequenceLoopWarning(GetFileName()); }
+
+}
+ML_STAR.Zyppy_96_Gravity_Waste.SetMax(ML_STAR.Zyppy_96_Gravity_Waste.GetTotal());
+ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_2_1000F_Tips.SetMax(ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_2_1000F_Tips.GetTotal());
+ML_STAR.Zyppy_Magnet_MIDI_Plate.SetMax(ML_STAR.Zyppy_Magnet_MIDI_Plate.GetTotal());
+ML_STAR.Zyppy_96_Gravity_Waste.SetCurrentPosition(1);
+ML_STAR.Zyppy_Zyppy_Wash_Buffer_Transfer_2_1000F_Tips.SetCurrentPosition(1);
+ML_STAR.Zyppy_Magnet_MIDI_Plate.SetCurrentPosition(1);
+}
+// }} ""
+// {{ 285 1 0 "df3de30e_3048_4370_a44497eae15eeecc" "{B31F3531-5D80-11d4-A5EB-0050DA737D89}"
+}
+// }} ""
+// {{ 286 1 0 "238b4457_9a5b_4371_a0e639e8f5def197" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("238b4457_9a5b_4371_a0e639e8f5def197"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 287 1 0 "4dd93e78_d959_4c44_ad73f9c14c0570a9" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 4. Remove and discard Supernatant. Remove 96-Well Block from magnetic stand to HHS. ");
+// }} ""
+// {{ 288 1 0 "709e1a6d_51fb_4e76_96003f834fd74ca6" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - (6) PROTOCOL (Zyppy Wash Buffer 2)\n1. Dispense 400 킠 of Zyppy Wash Buffer to each well of the plate.\n2. Transfer to HHS and Vortex for 30 seconds to re-suspend beads.\n3. Transfer Collection Plate to magnetic stand and incubate for 2 minutes.\n4. Remove and discard Supernatant. Remove 96-Well Block from magnetic stand to HHS. ");
+// }} ""
+// {{ 289 1 0 "ec5d699b_1b79_4062_86ef2ec92c8625e8" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - (7) PROTOCOL (Elution Buffer)\n1. Incubate on heating element (65 C) for 30 minutes.\n2. Transfer off HHS and transfer 40 킠 of Zyppy Elution Buffer to each well of the Collection Plate.\n3. Transfer to HHS and Vortex for 10 seconds.\n4. Incubate for 5 minutes. Every minute, vortex for 5 seconds to resuspend beads.\n5. Transfer to magnetic stand and incubate for 1 minute.\n6. Transfer Eluate to Elution Plate");
+// }} ""
+// {{ 290 1 0 "8f06589c_cd26_4bf8_956d1bce02fbdf4d" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - Elution Buffer Step Variable and Sequence Assignment");
+// }} ""
+// {{ 291 1 0 "12c97cc6_ea4f_457f_913c74df898f4a97" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Drying_Time_Duration = 1800;
+// }} ""
+// {{ 292 1 0 "4cac8622_6d2e_4a96_9533806c99e63ccf" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Elution_Buffer_Volume = 40;
+// }} ""
+// {{ 293 1 0 "0c503566_2111_467e_b67ea9be21efe764" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Elution_Buffer_Vortex_Duration = 10;
+// }} ""
+// {{ 294 1 0 "b5b886ea_e5a5_40ee_9fe442d12f6b9653" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Elution_Buffer_Incubation_Temperature = 65;
+// }} ""
+// {{ 295 1 0 "f3c5cbf5_5c18_4e01_a70ee9a4748315d6" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Elution_Buffer_Vortex_Intermittent_Incubation_Duration = 55;
+// }} ""
+// {{ 296 1 0 "b3c87290_601b_436f_a3198f19b7acca4a" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Elution_Buffer_Vortex_Intermittent_Vortex_Duration = 5;
+// }} ""
+// {{ 297 1 0 "354c5819_d0ee_45c6_bf0595a27b65be4c" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Elution_Buffer_Vortex_Loop_Recursion_Amount = 5;
+// }} ""
+// {{ 298 1 0 "efee9b77_3d2b_47b5_98fe3d5a8dd4e72f" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Elution_Buffer_Magnet_Incubation_Duration = 60;
+// }} ""
+// {{ 299 1 0 "5daafba0_a3cb_491e_8ca23d54d95ca77a" "{B31F3543-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_Elution_Buffer_Elution_Plate_Transfer_Volume = 30;
+// }} ""
+// {{ 300 1 0 "8f06589c_cd26_4bf8_956d1bce02fbdf4d" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - Elution Buffer Step Variable and Sequence Assignment");
+// }} ""
+// {{ 301 1 0 "73016574_27f2_44e8_a6ece670ffa2247a" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 1. Incubate on heating element (65 C) for 30 minutes.");
+// }} ""
+// {{{ 302 1 0 "3c0f8138_0001_4636_8f14a7612728f59f" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StartTempCtrl(Zyppy_varHHS1, 65, 0);
+// }} ""
+// {{ 303 1 0 "7b906d70_656a_485e_aba293d05306a71b" "{B31F353E-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer5.SetTimer(Zyppy_Drying_Time_Duration) )
+{
+    MECC::RaiseRuntimeErrorEx(-1355939584, MECC::IDS::stepNameTimerStart, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 304 1 0 "37b63d61_482e_45fd_8727a2d35dfb3ce7" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer5.WaitTimer(hslTrue, hslTrue) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{{ 305 1 0 "daf29f2c_52e4_4546_8c13db275f757017" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StartTempCtrl(Zyppy_varHHS1, 22, 0);
+// }} ""
+// {{ 306 1 0 "73016574_27f2_44e8_a6ece670ffa2247a" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 1. Incubate on heating element (65 C) for 30 minutes.");
+// }} ""
+// {{ 307 1 0 "d12b585b_8d89_469c_8bd257ca0a160dfa" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 2. Transfer off HHS and transfer 40 킠 of Zyppy Elution Buffer to each well of the Collection Plate.");
+// }} ""
+// {{ 308 1 0 "f7aa9c36_ad9c_41e6_b5bd954a7762d25f" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("f7aa9c36_ad9c_41e6_b5bd954a7762d25f"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 309 1 0 "a8aaf616_9080_4872_904871d200525de5" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+loopCounter8 = 0;
+while (
+   (ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() > 0)
+)
+{
+AlignSequences(hslTrue, ML_STAR.Zyppy_Collection_Plate, 1, ML_STAR.Zyppy_Elution_Buffer, 1, ML_STAR.Zyppy_Elution_Buffer_Transfer_50F_Tips, 1);
+loopCounter8 = loopCounter8 + 1;
+// }} ""
+// {{ 310 1 0 "e1fb15ce_a296_42fb_936a5e9316404149" "ML_STAR:{E91EFCB6-A447-4dfc-828E-7EBF29139CD2}"
+{
+	ML_STAR._E91EFCB6_A447_4dfc_828E_7EBF29139CD2("e1fb15ce_a296_42fb_936a5e9316404149"); // EasyAspirate
+}
+// }} ""
+// {{ 311 1 0 "eac1ab49_6593_4ec1_b79cab0a2873a29a" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("eac1ab49_6593_4ec1_b79cab0a2873a29a"); // EasyDispense
+}
+// }} ""
+// {{ 312 1 0 "a8aaf616_9080_4872_904871d200525de5" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+if (
+   (ML_STAR.Zyppy_Collection_Plate.GetCurrentPosition() > 0 && ML_STAR.Zyppy_Collection_Plate.GetMax() == 0 )
+)
+{ MECC::EndlessSequenceLoopWarning(GetFileName()); }
+
+}
+ML_STAR.Zyppy_Collection_Plate.SetMax(ML_STAR.Zyppy_Collection_Plate.GetTotal());
+ML_STAR.Zyppy_Elution_Buffer.SetMax(ML_STAR.Zyppy_Elution_Buffer.GetTotal());
+ML_STAR.Zyppy_Elution_Buffer_Transfer_50F_Tips.SetMax(ML_STAR.Zyppy_Elution_Buffer_Transfer_50F_Tips.GetTotal());
+ML_STAR.Zyppy_Collection_Plate.SetCurrentPosition(1);
+ML_STAR.Zyppy_Elution_Buffer.SetCurrentPosition(1);
+ML_STAR.Zyppy_Elution_Buffer_Transfer_50F_Tips.SetCurrentPosition(1);
+}
+// }} ""
+// {{ 313 1 0 "d12b585b_8d89_469c_8bd257ca0a160dfa" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 2. Transfer off HHS and transfer 40 킠 of Zyppy Elution Buffer to each well of the Collection Plate.");
+// }} ""
+// {{ 314 1 0 "9f668c8e_0206_4179_b7bcac95da0617cc" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 3. Transfer to HHS and Vortex for 10 seconds.");
+// }} ""
+// {{ 315 1 0 "06939472_20ef_4357_883d9834168d1ab4" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("06939472_20ef_4357_883d9834168d1ab4"); // EasyCOREGripTransport
+}
+// }} ""
+// {{{ 316 1 0 "f54ccebd_121d_4b12_8b87b7f0a1a0bd11" "{7C4EF7A7-39BE-406a-897F-71F3A35B4093}"
+HSS_Shaking(Zyppy_varHHS1, 1100, Zyppy_Elution_Buffer_Vortex_Duration);
+// }} ""
+// {{ 317 1 0 "9f668c8e_0206_4179_b7bcac95da0617cc" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 3. Transfer to HHS and Vortex for 10 seconds.");
+// }} ""
+// {{ 318 1 0 "80d1f5c4_216c_4306_8f34fa5fbd4957c7" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 4. Incubate for 5 minutes. Every minute, vortex for 5 seconds to resuspend beads.");
+// }} ""
+// {{{ 319 1 0 "291a554e_c9d1_4d8a_ac12f8cc24225071" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StartTempCtrl(Zyppy_varHHS1, 65, 0);
+// }} ""
+// {{ 320 1 0 "236010ea_c5c6_48c4_b170e437a18e131b" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+for(loopCounter9 = 0; loopCounter9 < Zyppy_Elution_Buffer_Vortex_Loop_Recursion_Amount;)
+{
+loopCounter9 = loopCounter9 + 1;
+// }} ""
+// {{{ 321 1 0 "e79d3c7d_3476_4576_937845025b954f58" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StartShaker(Zyppy_varHHS1, 1100);
+// }} ""
+// {{ 322 1 0 "307d5fca_1bb5_44bb_bc2d5c5d696a0b0c" "{B31F353E-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer6.SetTimer(Zyppy_Elution_Buffer_Vortex_Intermittent_Vortex_Duration) )
+{
+    MECC::RaiseRuntimeErrorEx(-1355939584, MECC::IDS::stepNameTimerStart, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 323 1 0 "61176474_4142_4cbe_97ca05b1fb453a35" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer6.WaitTimer(hslTrue, hslTrue) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{{ 324 1 0 "0131dc92_3bc2_4ed0_af60d85b5d5007d2" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StopShaker(Zyppy_varHHS1);
+// }} ""
+// {{ 325 1 0 "37cb693f_b09a_4fa5_ba38881700b7460d" "{B31F353E-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer7.SetTimer(Zyppy_Elution_Buffer_Vortex_Intermittent_Incubation_Duration) )
+{
+    MECC::RaiseRuntimeErrorEx(-1355939584, MECC::IDS::stepNameTimerStart, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 326 1 0 "243936c6_af5f_442f_843df632d5f8cb2a" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer7.WaitTimer(hslTrue, hslTrue) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 327 1 0 "236010ea_c5c6_48c4_b170e437a18e131b" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+}
+}
+// }} ""
+// {{{ 328 1 0 "caaa6c1a_c7e4_42c5_9faf0c6319093a54" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StartTempCtrl(Zyppy_varHHS1, 22, 0);
+// }} ""
+// {{ 329 1 0 "80d1f5c4_216c_4306_8f34fa5fbd4957c7" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 4. Incubate for 5 minutes. Every minute, vortex for 5 seconds to resuspend beads.");
+// }} ""
+// {{ 330 1 0 "362833b6_1187_4539_a4abd841c7f1e52e" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 5. Transfer to magnetic stand and incubate for 1 minute.");
+// }} ""
+// {{ 331 1 0 "f942d00f_dfef_465b_91d5ad1e77aa8fbf" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("f942d00f_dfef_465b_91d5ad1e77aa8fbf"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 332 1 0 "7d406b5a_e312_4779_a11d76ce252a9e81" "{B31F353E-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer8.SetTimer(Zyppy_Elution_Buffer_Magnet_Incubation_Duration) )
+{
+    MECC::RaiseRuntimeErrorEx(-1355939584, MECC::IDS::stepNameTimerStart, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 333 1 0 "ec677fa7_8836_4aae_ac9ff81a8cd2e0a5" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer8.WaitTimer(hslTrue, hslTrue) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 334 1 0 "362833b6_1187_4539_a4abd841c7f1e52e" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 5. Transfer to magnetic stand and incubate for 1 minute.");
+// }} ""
+// {{ 335 1 0 "54e2df8e_2867_4639_9c6b49a74c62c8d7" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group start - 6. Transfer Eluate to Elution Plate");
+// }} ""
+// {{ 336 1 0 "72571295_91fa_43ad_9902cb23352f16ab" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+loopCounter7 = 0;
+while (
+   (ML_STAR.Zyppy_Magnet_MIDI_Plate.GetCurrentPosition() > 0)
+)
+{
+AlignSequences(hslTrue, ML_STAR.Zyppy_Elution_Buffer_Transfer_50F_Tips, 1, ML_STAR.Zyppy_Elution_Plate, 1, ML_STAR.Zyppy_Magnet_MIDI_Plate, 1);
+loopCounter7 = loopCounter7 + 1;
+// }} ""
+// {{ 337 1 0 "0f85d886_a3d1_4b77_ae312e9fda7841c4" "ML_STAR:{E91EFCB6-A447-4dfc-828E-7EBF29139CD2}"
+{
+	ML_STAR._E91EFCB6_A447_4dfc_828E_7EBF29139CD2("0f85d886_a3d1_4b77_ae312e9fda7841c4"); // EasyAspirate
+}
+// }} ""
+// {{ 338 1 0 "e1b16410_663a_4a26_a6eb2719d7096b52" "ML_STAR:{01571348-0D66-4d27-9E97-65F9EE27C956}"
+{
+	ML_STAR._01571348_0D66_4d27_9E97_65F9EE27C956("e1b16410_663a_4a26_a6eb2719d7096b52"); // EasyDispense
+}
+// }} ""
+// {{ 339 1 0 "72571295_91fa_43ad_9902cb23352f16ab" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+if (
+   (ML_STAR.Zyppy_Magnet_MIDI_Plate.GetCurrentPosition() > 0 && ML_STAR.Zyppy_Magnet_MIDI_Plate.GetMax() == 0 )
+)
+{ MECC::EndlessSequenceLoopWarning(GetFileName()); }
+
+}
+ML_STAR.Zyppy_Elution_Buffer_Transfer_50F_Tips.SetMax(ML_STAR.Zyppy_Elution_Buffer_Transfer_50F_Tips.GetTotal());
+ML_STAR.Zyppy_Elution_Plate.SetMax(ML_STAR.Zyppy_Elution_Plate.GetTotal());
+ML_STAR.Zyppy_Magnet_MIDI_Plate.SetMax(ML_STAR.Zyppy_Magnet_MIDI_Plate.GetTotal());
+ML_STAR.Zyppy_Elution_Buffer_Transfer_50F_Tips.SetCurrentPosition(1);
+ML_STAR.Zyppy_Elution_Plate.SetCurrentPosition(1);
+ML_STAR.Zyppy_Magnet_MIDI_Plate.SetCurrentPosition(1);
+}
+// }} ""
+// {{ 340 1 0 "9b990115_6056_4b80_8b15060c7180818e" "ML_STAR:{7EF8970F-F753-4c75-AD76-0E0D9C2CC9CD}"
+{
+	ML_STAR._7EF8970F_F753_4c75_AD76_0E0D9C2CC9CD("9b990115_6056_4b80_8b15060c7180818e"); // EasyCOREGripTransport
+}
+// }} ""
+// {{ 341 1 0 "54e2df8e_2867_4639_9c6b49a74c62c8d7" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - 6. Transfer Eluate to Elution Plate");
+// }} ""
+// {{ 342 1 0 "ec5d699b_1b79_4062_86ef2ec92c8625e8" "{586C3429-F931-405f-9938-928E22C90BFA}"
+MECC::TraceComment("Group end - (7) PROTOCOL (Elution Buffer)\n1. Incubate on heating element (65 C) for 30 minutes.\n2. Transfer off HHS and transfer 40 킠 of Zyppy Elution Buffer to each well of the Collection Plate.\n3. Transfer to HHS and Vortex for 10 seconds.\n4. Incubate for 5 minutes. Every minute, vortex for 5 seconds to resuspend beads.\n5. Transfer to magnetic stand and incubate for 1 minute.\n6. Transfer Eluate to Elution Plate");
+// }} ""
+// {{ 343 1 0 "cb11e192_4df9_4cce_bb6302e2cc459a47" "{998A7CCC-4374-484D-A6ED-E8A4F0EB71BA}"
+customDialog0C588B244805453d93C7E68EA6146F1F.InitCustomDialog( "cb11e192_4df9_4cce_bb6302e2cc459a47" );
+customDialog0C588B244805453d93C7E68EA6146F1F.ShowCustomDialog();
+// }} ""
+// {{{ 344 1 0 "6837c750_938a_44fc_84ef74514c2e34b7" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::Terminate();
+// }} ""
+// {{ 2 "AutoExitBlock" ""
+// }} ""
+// {{{ 5 "main" "End"
+} }
+// }} ""
+// $$author=robso$$valid=0$$time=2025-07-29 13:37$$checksum=e93ea60b$$length=084$$

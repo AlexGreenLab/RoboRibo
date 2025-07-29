@@ -1,0 +1,101 @@
+// {{{ 2 "SubmethodForwardDeclaration" ""
+private function HSS_Shaking( variable Zyppy_Selected_HSS, variable Zyppy_Vortex_Speed, variable Zyppy_Vortex_Duration ) void ;
+private function MagBinding_Bead_HSS_Shaker( variable Zyppy_HSS_MagBinding_Bead_Vortex_Total_Duration, variable Zyppy_HSS_MagBinding_Bead_Intermittent_Rest_Duration, variable Zyppy_HSS_MagBinding_Bead_Intermittent_Vortex_Duration, variable Zyppy_Selected_HSS, variable Zyppy_HSS_Vortex_Speed ) void ;
+function OnAbort(  ) void ;
+// }} ""
+// {{{ 5 "OnAbort" "Begin"
+function OnAbort(  ) void {
+// }} ""
+// {{ 5 "OnAbort" "InitLocals"
+// }} ""
+// {{{ 5 "OnAbort" "End"
+}
+// }} ""
+// {{{ 5 "HSS_Shaking" "Begin"
+private function HSS_Shaking( variable Zyppy_Selected_HSS, variable Zyppy_Vortex_Speed, variable Zyppy_Vortex_Duration ) void {
+// }} ""
+private timer timer1;
+// {{ 5 "HSS_Shaking" "InitLocals"
+// }} ""
+// {{{ 326 1 0 "933c9f4a_24f5_45b9_b8cce8ce650500ee" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StartShaker(Zyppy_Selected_HSS, Zyppy_Vortex_Speed);
+// }} ""
+// {{ 327 1 0 "66a512fc_a9a2_4fc1_99541e9165a47b9d" "{B31F353E-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer1.SetTimer(Zyppy_Vortex_Duration) )
+{
+    MECC::RaiseRuntimeErrorEx(-1355939584, MECC::IDS::stepNameTimerStart, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 328 1 0 "892a82c8_9ce1_4fbb_adcbeb3306edc52d" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer1.WaitTimer(hslTrue, hslTrue) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{{ 329 1 0 "4c7307fe_b05d_4b6c_b6d4253f170e45d8" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StopShaker(Zyppy_Selected_HSS);
+// }} ""
+// {{{ 5 "HSS_Shaking" "End"
+}
+// }} ""
+// {{{ 5 "MagBinding_Bead_HSS_Shaker" "Begin"
+private function MagBinding_Bead_HSS_Shaker( variable Zyppy_HSS_MagBinding_Bead_Vortex_Total_Duration, variable Zyppy_HSS_MagBinding_Bead_Intermittent_Rest_Duration, variable Zyppy_HSS_MagBinding_Bead_Intermittent_Vortex_Duration, variable Zyppy_Selected_HSS, variable Zyppy_HSS_Vortex_Speed ) void {
+// }} ""
+private variable loopCounter9;
+private variable Zyppy_HSS_Magbinding_Bead_Total_Step_Duration;
+private variable Zyppy_HSS_MagBinding_Bead_Total_Loop_Itteration;
+private timer timer3;
+private timer timer4;
+// {{ 5 "MagBinding_Bead_HSS_Shaker" "InitLocals"
+// }} ""
+// {{ 331 1 0 "6769018f_383b_4166_bce8bdd61d1a6ed5" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_HSS_Magbinding_Bead_Total_Step_Duration = Zyppy_HSS_MagBinding_Bead_Intermittent_Rest_Duration + Zyppy_HSS_MagBinding_Bead_Intermittent_Vortex_Duration;
+// }} ""
+// {{ 332 1 0 "f0d20ab4_3c51_4633_b6dcebe12cd169d4" "{B31F3544-5D80-11d4-A5EB-0050DA737D89}"
+Zyppy_HSS_MagBinding_Bead_Total_Loop_Itteration = Zyppy_HSS_MagBinding_Bead_Vortex_Total_Duration / Zyppy_HSS_Magbinding_Bead_Total_Step_Duration;
+// }} ""
+// {{ 333 1 0 "e2afaf60_21fa_4740_9161980c147988f7" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+{
+for(loopCounter9 = 0; loopCounter9 < Zyppy_HSS_MagBinding_Bead_Total_Loop_Itteration;)
+{
+loopCounter9 = loopCounter9 + 1;
+// }} ""
+// {{{ 334 1 0 "26451ecd_de45_4e83_b4d1cc482f8320d3" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StartShaker(Zyppy_Selected_HSS, Zyppy_HSS_Vortex_Speed);
+// }} ""
+// {{ 335 1 0 "73e4d031_42af_480e_a6d157445c8b4f43" "{B31F353E-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer3.SetTimer(Zyppy_HSS_MagBinding_Bead_Intermittent_Vortex_Duration) )
+{
+    MECC::RaiseRuntimeErrorEx(-1355939584, MECC::IDS::stepNameTimerStart, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 336 1 0 "56fc173f_8539_4d72_a3f7299acc23248a" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer3.WaitTimer(hslTrue, hslTrue) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{{ 337 1 0 "399111c3_7edf_454a_bd3c7de7bd84b131" "{C1F3C015-47B3-4514-9407-AC2E65043419}"
+HSLHamHeaterShaker::StopShaker(Zyppy_Selected_HSS);
+// }} ""
+// {{ 338 1 0 "ae60323e_3ce3_4ef2_94d92b6906ec7c54" "{B31F353E-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer4.SetTimer(Zyppy_HSS_MagBinding_Bead_Intermittent_Rest_Duration) )
+{
+    MECC::RaiseRuntimeErrorEx(-1355939584, MECC::IDS::stepNameTimerStart, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 339 1 0 "4ae47550_530e_4e98_8ca034892e39bb8c" "{B31F353F-5D80-11d4-A5EB-0050DA737D89}"
+if( 0 == timer4.WaitTimer(hslTrue, hslTrue) )
+{
+    MECC::RaiseRuntimeErrorEx(-1339162368, MECC::IDS::stepNameTimerWait, MECC::IDS::errorStepFailed, "", "HxMetEdCompCmd");
+}
+// }} ""
+// {{ 340 1 0 "e2afaf60_21fa_4740_9161980c147988f7" "{B31F3532-5D80-11d4-A5EB-0050DA737D89}"
+}
+}
+// }} ""
+// {{{ 5 "MagBinding_Bead_HSS_Shaker" "End"
+}
+// }} ""
+/* {{ 2 "SubmethodInsertLine" "" */ // }} ""
+// $$author=Boston University$$valid=0$$time=2024-08-15 11:27$$checksum=96a6b059$$length=096$$
