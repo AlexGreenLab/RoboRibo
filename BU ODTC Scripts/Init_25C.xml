@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MethodSet>
+  <DeleteAllMethods>false</DeleteAllMethods>
+  <PreMethod methodName="Init_25C" creator="Jogi_H" dateTime="2024-08-27T13:49:37.5774972-04:00">
+    <TargetBlockTemperature>25</TargetBlockTemperature>
+    <TargetLidTemp>110</TargetLidTemp>
+  </PreMethod>
+</MethodSet>
