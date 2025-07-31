@@ -3,8 +3,9 @@
 This repo contains Hamilton scripts and data files used in Robson et. al. “Automated assembly of programmable RNA-based sensors"
 
 1. `Hamilton Methods` provides the Hamilton code for replicating the experiments carried out in Figure 1.
-2. `Molecular Cloning_v1.1` encompasses three sub-methods: PCR, Gibson Assembly, and Transformation.
-3. `Zyppy_Full_Walkaway` encompasses the plasmid purification protocol rewritten to be compatible with the Hamilton NGS STAR deck layout. Compatible kit information can be found at https://www.zymoresearch.com/products/zyppy-96-plasmid-magbead-kit
+2. `BU ODTC Scripts` provides the necessary scripts for the INHECO On-Deck Thermal Cycler (ODTC) used during the PCR and Gibson Assembly sub-methods. 
+3. `Molecular Cloning_v1.1` encompasses three sub-methods: PCR, Gibson Assembly, and Transformation.
+4. `Zyppy_Full_Walkaway` encompasses the plasmid purification protocol rewritten to be compatible with the Hamilton NGS STAR deck layout. Compatible kit information can be found at https://www.zymoresearch.com/products/zyppy-96-plasmid-magbead-kit
    
 # Downloading Files 
 Files can be downloaded manually or obtained by: 
